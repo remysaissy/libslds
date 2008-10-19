@@ -1,0 +1,31 @@
+	** note on the API of libslds **
+
+Basic principle:
+The library relies on two principles:
+    - no memory allocation. Everything is provided by the caller and the API focuses only on the algorithm.
+    - class agregation like behaviour. Data structures can be easly added to a container simply by addind a
+      variable member to it.
+
+Lists:
+ TODO
+
+Hashs:
+ TODO
+
+Trees:
+ Two kind of trees are represented:
+ 	- binary;
+ 	- n-ary.
+ 
+ Binary trees interface:
+ any binary tree provides the following methods:
+ 	- init;
+ 	- insert;
+ 	- remove;
+ 	- lookup;
+ 	- walk (todo);
+ 	- prune (todo);
+ 	- graft (todo).
+
+TODO ADDED TO THE ECLIPSE PROERTIES ../libslds/Debug/libslds.a
+
