@@ -53,7 +53,7 @@
 </toolChain>
 </folderInfo>
 <sourceEntries>
-<entry excluding="tests/" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name=""/>
+<entry excluding="hash/tests/|list/tests/|tests-core/|tree/binary/tests/|tree/nary/tests/" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name=""/>
 </sourceEntries>
 </configuration>
 </storageModule>
@@ -1342,7 +1342,7 @@
 </toolChain>
 </folderInfo>
 <sourceEntries>
-<entry excluding="tests" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+<entry excluding="hash/tests/|list/tests/|tests-core/|tree/binary/tests/|tree/nary/tests/" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name=""/>
 </sourceEntries>
 </configuration>
 </storageModule>
