@@ -67,15 +67,6 @@ extern void Teststack_push(CuTest*);
 extern void Teststack_push_with_invalid_new(CuTest*);
 extern void Teststack_pop(CuTest*);
 extern void Teststack_pop_with_invalid_item(CuTest*);
-extern void Testnary_tree_init(CuTest*);
-extern void Testnary_tree_insert(CuTest*);
-extern void Testnary_tree_lookup(CuTest*);
-extern void Testnary_tree_remove(CuTest*);
-extern void Testnary_tree_walk_preorder(CuTest*);
-extern void Testnary_tree_walk_inorder(CuTest*);
-extern void Testnary_tree_walk_postorder(CuTest*);
-extern void Testnary_tree_graft(CuTest*);
-extern void Testnary_tree_prune(CuTest*);
 extern void Testbinary_tree_init(CuTest*);
 extern void Testbinary_tree_insert(CuTest*);
 extern void Testbinary_tree_lookup(CuTest*);
@@ -85,6 +76,24 @@ extern void Testbinary_tree_walk_inorder(CuTest*);
 extern void Testbinary_tree_walk_postorder(CuTest*);
 extern void Testbinary_tree_graft(CuTest*);
 extern void Testbinary_tree_prune(CuTest*);
+extern void Testsplay_tree_init(CuTest*);
+extern void Testsplay_tree_insert(CuTest*);
+extern void Testsplay_tree_lookup(CuTest*);
+extern void Testsplay_tree_remove(CuTest*);
+extern void Testsplay_tree_walk_preorder(CuTest*);
+extern void Testsplay_tree_walk_inorder(CuTest*);
+extern void Testsplay_tree_walk_postorder(CuTest*);
+extern void Testsplay_tree_graft(CuTest*);
+extern void Testsplay_tree_prune(CuTest*);
+extern void Testnary_tree_init(CuTest*);
+extern void Testnary_tree_insert(CuTest*);
+extern void Testnary_tree_lookup(CuTest*);
+extern void Testnary_tree_remove(CuTest*);
+extern void Testnary_tree_walk_preorder(CuTest*);
+extern void Testnary_tree_walk_inorder(CuTest*);
+extern void Testnary_tree_walk_postorder(CuTest*);
+extern void Testnary_tree_graft(CuTest*);
+extern void Testnary_tree_prune(CuTest*);
 extern void Testhashtable_init(CuTest*);
 extern void Testhashtable_insert(CuTest*);
 extern void Testhashtable_lookup(CuTest*);
@@ -94,17 +103,12 @@ extern void Testhashtable_remove(CuTest*);
 void RunAllTests(void) 
 {
 
-   CuString *output_tests = CuStringNew();
-    CuSuite* suite_tests = CuSuiteNew();
    CuString *output_list = CuStringNew();
     CuSuite* suite_list = CuSuiteNew();
    CuString *output_tree = CuStringNew();
     CuSuite* suite_tree = CuSuiteNew();
    CuString *output_hash = CuStringNew();
     CuSuite* suite_hash = CuSuiteNew();
-   CuString *output_UNIT_TESTING = CuStringNew();
-    CuSuite* suite_UNIT_TESTING = CuSuiteNew();
-
 
     SUITE_ADD_TEST(suite_list,  Testclist_init);
     SUITE_ADD_TEST(suite_list,  Testclist_init_with_null_pointer);
@@ -167,15 +171,6 @@ void RunAllTests(void)
     SUITE_ADD_TEST(suite_list,  Teststack_pop);
     SUITE_ADD_TEST(suite_list,  Teststack_pop_with_invalid_item);
 
-    SUITE_ADD_TEST(suite_tree,  Testnary_tree_init);
-    SUITE_ADD_TEST(suite_tree,  Testnary_tree_insert);
-    SUITE_ADD_TEST(suite_tree,  Testnary_tree_lookup);
-    SUITE_ADD_TEST(suite_tree,  Testnary_tree_remove);
-    SUITE_ADD_TEST(suite_tree,  Testnary_tree_walk_preorder);
-    SUITE_ADD_TEST(suite_tree,  Testnary_tree_walk_inorder);
-    SUITE_ADD_TEST(suite_tree,  Testnary_tree_walk_postorder);
-    SUITE_ADD_TEST(suite_tree,  Testnary_tree_graft);
-    SUITE_ADD_TEST(suite_tree,  Testnary_tree_prune);
     SUITE_ADD_TEST(suite_tree,  Testbinary_tree_init);
     SUITE_ADD_TEST(suite_tree,  Testbinary_tree_insert);
     SUITE_ADD_TEST(suite_tree,  Testbinary_tree_lookup);
@@ -185,18 +180,29 @@ void RunAllTests(void)
     SUITE_ADD_TEST(suite_tree,  Testbinary_tree_walk_postorder);
     SUITE_ADD_TEST(suite_tree,  Testbinary_tree_graft);
     SUITE_ADD_TEST(suite_tree,  Testbinary_tree_prune);
+    SUITE_ADD_TEST(suite_tree,  Testsplay_tree_init);
+    SUITE_ADD_TEST(suite_tree,  Testsplay_tree_insert);
+    SUITE_ADD_TEST(suite_tree,  Testsplay_tree_lookup);
+    SUITE_ADD_TEST(suite_tree,  Testsplay_tree_remove);
+    SUITE_ADD_TEST(suite_tree,  Testsplay_tree_walk_preorder);
+    SUITE_ADD_TEST(suite_tree,  Testsplay_tree_walk_inorder);
+    SUITE_ADD_TEST(suite_tree,  Testsplay_tree_walk_postorder);
+    SUITE_ADD_TEST(suite_tree,  Testsplay_tree_graft);
+    SUITE_ADD_TEST(suite_tree,  Testsplay_tree_prune);
+    SUITE_ADD_TEST(suite_tree,  Testnary_tree_init);
+    SUITE_ADD_TEST(suite_tree,  Testnary_tree_insert);
+    SUITE_ADD_TEST(suite_tree,  Testnary_tree_lookup);
+    SUITE_ADD_TEST(suite_tree,  Testnary_tree_remove);
+    SUITE_ADD_TEST(suite_tree,  Testnary_tree_walk_preorder);
+    SUITE_ADD_TEST(suite_tree,  Testnary_tree_walk_inorder);
+    SUITE_ADD_TEST(suite_tree,  Testnary_tree_walk_postorder);
+    SUITE_ADD_TEST(suite_tree,  Testnary_tree_graft);
+    SUITE_ADD_TEST(suite_tree,  Testnary_tree_prune);
 
     SUITE_ADD_TEST(suite_hash,  Testhashtable_init);
     SUITE_ADD_TEST(suite_hash,  Testhashtable_insert);
     SUITE_ADD_TEST(suite_hash,  Testhashtable_lookup);
     SUITE_ADD_TEST(suite_hash,  Testhashtable_remove);
-
-
-    CuSuiteRun(suite_tests);
-    printf("tests test results:\n");
-    CuSuiteSummary(suite_tests, output_tests);
-    CuSuiteDetails(suite_tests, output_tests);
-    printf("%s\n", output_tests->buffer);
 
     CuSuiteRun(suite_list);
     printf("list test results:\n");
@@ -215,12 +221,6 @@ void RunAllTests(void)
     CuSuiteSummary(suite_hash, output_hash);
     CuSuiteDetails(suite_hash, output_hash);
     printf("%s\n", output_hash->buffer);
-
-    CuSuiteRun(suite_UNIT_TESTING);
-    printf("UNIT_TESTING test results:\n");
-    CuSuiteSummary(suite_UNIT_TESTING, output_UNIT_TESTING);
-    CuSuiteDetails(suite_UNIT_TESTING, output_UNIT_TESTING);
-    printf("%s\n", output_UNIT_TESTING->buffer);
 
 }
 

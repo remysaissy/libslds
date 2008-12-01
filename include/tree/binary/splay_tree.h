@@ -1,4 +1,4 @@
-/* 
+/*
  * This file is part of libslds
 
  * Copyright (C) Remy Saissy <remy.saissy@gmail.com>
@@ -31,100 +31,199 @@
  */
 typedef struct		splay_tree_s
 {
-binary_tree_base_t	_btree_base;
-  void			*parent; /** the parent node. */  
+  binary_tree_base_t	_btree_base;
+  void			*parent; /** the parent node. */
 
 }			splay_tree_t;
 
-/* Implementation. */
+/**
+ * Initialize a splay tree node.
+ * @param tree The root of the tree.
+ * @param m The name of the splay tree data structure in tree.
+ * @return true on success, false on error.
+ */
+#define splay_tree_init(tree, m)                     \
+    _splay_tree_init((void *)(tree),                     \
+           (unsigned int)offsetof(typeof(*(tree)), m))
 
-#define	splay_tree_init(tree, m)						\
-	_splay_tree_init((void *)(tree),						\
-		   (unsigned int)offsetof(typeof(*(tree)), m))
+/**
+ * Look for a node in a splay tree.
+ * @param tree The root of the tree.
+ * @param key Key to the node to look for.
+ * @param m The name of the splay tree data structure in tree.
+ * @param compare_key_func callback for comparison.
+ * @return The node looked up on success, NULL on error.
+ */
+#define splay_tree_lookup(tree, key, m, compare_key_func)            \
+    _binary_tree_lookup((void **)&(tree),                       \
+        (void *)(key),                      \
+             (unsigned int)offsetof(typeof(*(tree)), m),    \
+             compare_key_func)
 
-#define	splay_tree_lookup(tree, key, m, compare_key_func)			\
-	_splay_tree_lookup((void **)&(tree),						\
-			(void *)(key),						\
-		     (unsigned int)offsetof(typeof(*(tree)), m),	\
-		     compare_key_func)
+/**
+ * Insert a splay tree node.
+ * @param tree The root of the tree.
+ * @param new The node to be added.
+ * @param m The name of the splay tree data structure in tree.
+ * @param compare_func callback for comparison.
+ * @return true on success, false on error.
+ */
+#define splay_tree_insert(tree, new, m, compare_func)            \
+    _splay_tree_insert((void **)&(tree),                     \
+              (void *)(new),                        \
+             (unsigned int)offsetof(typeof(*(tree)), m),    \
+             compare_func)
 
-#define	splay_tree_insert(tree, new, m, compare_func)			\
-	_splay_tree_insert((void **)&(tree),						\
-			(void *)(new),						\
-		     (unsigned int)offsetof(typeof(*(tree)), m),	\
-		     compare_func)
+/**
+ * Remove a splay tree node.
+ * @param tree The root of the tree.
+ * @param key Key to the node to be removed.
+ * @param m The name of the splay tree data structure in tree.
+ * @param compare_func callback for comparison.
+ * @param compare_key_func callback for comparison.
+ * @return The node removed on success, NULL on error.
+ */
+#define splay_tree_remove(tree, key, m, compare_func, compare_key_func)  \
+     _splay_tree_remove((void **)&(tree),                        \
+         (void *)(key),                     \
+          (unsigned int)offsetof(typeof(*(tree)), m),       \
+          compare_func,                     \
+          compare_key_func)
 
-#define	splay_tree_remove(tree, key, m, compare_func, compare_key_func)	\
-     _splay_tree_remove((void **)&(tree),						\
-    		 (void *)(key),						\
-		  (unsigned int)offsetof(typeof(*(tree)), m),		\
-		  compare_func,						\
-		  compare_key_func)
+/**
+ * Graft a susplay_tree in a splay tree.
+ * @param tree The root of the tree.
+ * @param susplay_tree susplay_tree to be graft.
+ * @param m The name of the splay tree data structure in tree.
+ * @param compare_func callback for comparison.
+ * @return true on success, false on error.
+ * @note A susplay_tree that has nodes which are also in tree can be grafted.
+ * this preliminary control is left to the caller.
+ */
+#define splay_tree_graft(tree, susplay_tree, m, compare_func)         \
+    _splay_tree_graft((void **)&(tree),                      \
+        (void *)(susplay_tree),                      \
+             (unsigned int)offsetof(typeof(*(tree)), m),    \
+             compare_func)
 
-#define	splay_tree_prune(tree, subtree, m, compare_key_func)			\
-		_splay_tree_prune((void **)&(tree),						\
-				(void *)(subtree),						\
-		     (unsigned int)offsetof(typeof(*(tree)), m),	\
-		     compare_func)
+/**
+ * Prune a splay tree.
+ * @param tree The root of the tree.
+ * @param key key of the part of the tree to be pruned.
+ * @param m The name of the splay tree data structure in tree.
+ * @param compare_key_func callback for comparison.
+ * @return The susplay_tree on success, NULL on error.
+ */
+#define splay_tree_prune(tree, key, m, compare_key_func)         \
+    _splay_tree_prune((void **)&(tree),                      \
+        (void *)(key),                      \
+             (unsigned int)offsetof(typeof(*(tree)), m),    \
+             compare_key_func)
 
-#define	splay_tree_graft(tree, key, m, compare_key_func)			\
-	_splay_tree_graft((void **)&(tree),						\
-			(void *)(key),						\
-		     (unsigned int)offsetof(typeof(*(tree)), m),	\
-		     compare_key_func)
+/**
+ * Step along the tree in a pre-order fashion.
+ * @param tree The root of the tree.
+ * @param m The name of the splay tree data structure in tree.
+ * @param walk_func Callback used like an iterator. Called for every nodes.
+ * @param data arbitrary data for callbacks.
+ */
+#define splay_tree_walk_preorder(tree, m, walk_func, data)                       \
+        _binary_tree_walk_preorder((void **)&(tree),                                \
+                            (unsigned int)offsetof(typeof(*(tree)), m), \
+                            walk_func,                                      \
+                            (void *)(data))
 
-#define	splay_tree_walk_preorder(tree, m, walk_func, data)						\
-		_binary_tree_walk_preorder((void **)&(tree),								\
-							(unsigned int)offsetof(typeof(*(tree)), m),	\
-							walk_func,										\
-							(void *)(data))
+/**
+ * Step along the tree in a in-order fashion.
+ * @param tree The root of the tree.
+ * @param m The name of the splay tree data structure in tree.
+ * @param walk_func Callback used like an iterator. Called for every nodes.
+ * @param data arbitrary data for callbacks.
+ */
+#define splay_tree_walk_inorder(tree, m, walk_func, data)                        \
+        _binary_tree_walk_inorder((void **)&(tree),                             \
+                            (unsigned int)offsetof(typeof(*(tree)), m), \
+                            walk_func,                                      \
+                            (void *)(data))
 
-#define	splay_tree_walk_inorder(tree, m, walk_func, data)						\
-		_binary_tree_walk_inorder((void **)&(tree),								\
-							(unsigned int)offsetof(typeof(*(tree)), m),	\
-							walk_func,										\
-							(void *)(data))
-
-#define	splay_tree_walk_postorder(tree, m, walk_func, data)						\
-		_binary_tree_walk_postorder((void **)&(tree),						\
-							(unsigned int)offsetof(typeof(*(tree)), m),	\
-							walk_func,										\
-							(void *)(data))
-
+/**
+ * Step along the tree in a post-order fashion.
+ * @param tree The root of the tree.
+ * @param m The name of the splay tree datas tructure in tree.
+ * @param walk_func Callback used like an iterator. Called for every nodes.
+ * @param data arbitrary data for callbacks.
+ */
+#define splay_tree_walk_postorder(tree, m, walk_func, data)                      \
+        _binary_tree_walk_postorder((void **)&(tree),                       \
+                            (unsigned int)offsetof(typeof(*(tree)), m), \
+                            walk_func,                                      \
+                            (void *)(data))
 
 
 /* tree implementation. */
 
-bool	_splay_tree_init(void *tree,
-			 unsigned int m);
+/**
+ * Initialize a splay tree node.
+ * @param tree The root of the tree.
+ * @param m The offset of the splay tree data structure in tree.
+ * @return true on success, false on error.
+ */
+bool    _splay_tree_init(void *tree,
+            unsigned int m);
+/**
+ * Insert a splay tree node.
+ * @param tree The root of the tree.
+ * @param new The node to be added.
+ * @param m The offset of the splay tree data structure in tree.
+ * @param compare_func callback for comparison.
+ * @return true on success, false on error.
+ */
+bool    _splay_tree_insert(void **tree,
+              void *new,
+              unsigned int m,
+              btree_compare_p compare_func);
 
-void	*_splay_tree_lookup(void **tree, 
-			    void *key, 
-			    unsigned int m, 
-			    btree_compare_key_p compare_key_func);
+/**
+ * Remove a splay tree node.
+ * @param tree The root of the tree.
+ * @param key Key to the node to be removed.
+ * @param m The offset of the splay tree data structure in tree.
+ * @param compare_func callback for comparison.
+ * @param compare_key_func callback for comparison.
+ * @return The node removed on success, NULL on error.
+ */
+void    *_splay_tree_remove(void **tree,
+              void *key,
+              unsigned int m,
+              btree_compare_p compare_func,
+              btree_compare_key_p compare_key_func);
 
-bool	_splay_tree_insert(void **tree,
-			   void *new, 
-			   unsigned int m, 
-			   btree_compare_p compare_func);
+/**
+ * Graft a subsplay_tree in a splay tree.
+ * @param tree The root of the tree.
+ * @param subsplay_tree subtree to be graft.
+ * @param m The offset of the splay tree data structure in tree.
+ * @param compare_func callback for comparison.
+ * @return true on success, false on error.
+ * @note A susplay_tree that has nodes which are also in tree can be grafted.
+ * this preliminary control is left to the caller.
+ */
+bool    _splay_tree_graft(void **tree,
+             void *subsplay_tree,
+             unsigned int m,
+             btree_compare_p compare_func);
 
-bool	_splay_tree_remove(void **tree,
-			   void *key, 
-			   unsigned int m, 
-			   btree_compare_p compare_func,
-			   btree_compare_key_p compare_key_func);
-
-// TODO: prune.
-bool	_splay_tree_prune(void **tree,						
-		     void *subtree,						
-		     unsigned int m,	
-		     btree_compare_p compare_func);
-
-// TODO: graft.
-void	*_splay_tree_graft(void **tree,
-		     void *key,
-		     unsigned int m,
-		     btree_compare_key_p compare_key_func);
-
+/**
+ * Prune a splay tree.
+ * @param tree The root of the tree.
+ * @param key key of the part of the tree to be pruned.
+ * @param m The offset of the splay tree data structure in tree.
+ * @param compare_key_func callback for comparison.
+ * @return The susplay_tree on success, NULL on error.
+ */
+void    *_splay_tree_prune(void **tree,
+             void *key,
+             unsigned int m,
+             btree_compare_key_p compare_key_func);
 
 #endif /* __LIBSLDS_BINARY_SPLAY_TREE_H__ */

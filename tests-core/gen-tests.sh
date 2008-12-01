@@ -25,7 +25,7 @@ then
     exit;
 fi
 
-DIRS="`find $1 -maxdepth 1 -type d -not -name '.*' -and -not -name '*include*' -and -not -name 'libslds' -and -not -name 'tests-core' -printf \"%h/%f \"`"
+DIRS="`find $1 -maxdepth 1 -type d -not -name '.*' -and -not -name '*include*' -and -not -name 'libslds' -and -not -name 'tests-core' -and -not -name 'BUILD*' -and -not -name 'UNIT_TESTING' -printf \"%h/%f \"`"
 OUTPUT="$1/tests-core/AllTests.c"
 
 echo "$DIRS"

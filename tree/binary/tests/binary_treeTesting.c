@@ -31,7 +31,7 @@ typedef struct test_tree_s
 
   } test_tree_t;
 
-btree_compare_e BTREE_COMPARE(void *n1, void *n2)
+static btree_compare_e BTREE_COMPARE(void *n1, void *n2)
   {
     test_tree_t *bt1 = (test_tree_t *)n1;
     test_tree_t *bt2 = (test_tree_t *)n2;
@@ -43,7 +43,7 @@ btree_compare_e BTREE_COMPARE(void *n1, void *n2)
     return (BTREE_MATCH);
   }
 
-btree_compare_e BTREE_COMPARE_KEY(void *n1, void *key)
+static btree_compare_e BTREE_COMPARE_KEY(void *n1, void *key)
   {
     int k = (int)key;
     test_tree_t *bt1 = (test_tree_t *)n1;
