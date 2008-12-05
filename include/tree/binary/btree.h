@@ -31,25 +31,61 @@
  * set and unset at will.
  */
 
-#include <tree/binary/common.h>
-
 /* Data type. */
 
 /**
- * The datastructure which represents a binary tree.
+ * Enumerator of return values of comparison functions.
+ * When evaluating a binary tree node, the result can be
+ * to go to the left or to the right child. the comparison
+ * also match and, in that case, match is returned.
+ */
+typedef enum    _btree_compare_e
+{
+    BTREE_LEFT = -1,
+    BTREE_MATCH,
+    BTREE_RIGHT
+
+}               btree_compare_e;
+
+/**
+ * Comparison callback. This callback is used to compare two nodes.
+ * @param tree_node The node of the tree. Typically, this node is different from one call to another.
+ * @param node The node used for comparison.
+ * @return Where the caller must go next: left or right child or match if the comparison matched.
+ */
+typedef btree_compare_e (*btree_compare_p)(void *tree_node, void *node);
+
+/**
+ * Comparison callback. This callback is used to compare a node and a key.
+ * @param tree_node The node of the tree. Typically, this node is different from one call to another.
+ * @param key The key to compare with tree_node.
+ * @return Where the caller must go next: left or right child or match if the comparison matched.
+ */
+typedef btree_compare_e (*btree_compare_key_p)(void *tree_node, void *key);
+
+/**
+ * Walk along the tree callback. It is used like an iterator.
+ * @param node The node of the tree.
+ * @param data variable and optional parameter that can be used by the callback content. Typically used to locate the comparison state.
+ */
+typedef void            (*btree_walk_p)(void *node, void *data);
+
+/**
+ * The data structure which represents a binary tree.
  */
 typedef struct	btree_s
 {
-	binary_tree_base_t	_btree_base;
+  void          *left;
+  void          *right;
 
-}		btree_t;
+}		         btree_t;
 
 /* Implementation. */
 
 /**
  * Initialize a binary tree node.
  * @param tree The root of the tree.
- * @param m The name of the binary tree datastructure in tree.
+ * @param m The name of the binary tree data structure in tree.
  * @return true on success, false on error.
  */
 #define	btree_init(tree, m)						\
@@ -60,12 +96,12 @@ typedef struct	btree_s
  * Look for a node in a binary tree.
  * @param tree The root of the tree.
  * @param key Key to the node to look for.
- * @param m The name of the binary tree datastructure in tree.
+ * @param m The name of the binary tree data structure in tree.
  * @param compare_key_func callback for comparison.
  * @return The node looked up on success, NULL on error.
  */
 #define	btree_lookup(tree, key, m, compare_key_func)			\
-	_binary_tree_lookup((void **)&(tree),						\
+	_btree_lookup((void **)&(tree),						\
 	    (void *)(key),						\
 		     (unsigned int)offsetof(typeof(*(tree)), m),	\
 		     compare_key_func)
@@ -74,7 +110,7 @@ typedef struct	btree_s
  * Insert a binary tree node.
  * @param tree The root of the tree.
  * @param new The node to be added.
- * @param m The name of the binary tree datastructure in tree.
+ * @param m The name of the binary tree data structure in tree.
  * @param compare_func callback for comparison.
  * @return true on success, false on error.
  */
@@ -88,7 +124,7 @@ typedef struct	btree_s
  * Remove a binary tree node.
  * @param tree The root of the tree.
  * @param key Key to the node to be removed.
- * @param m The name of the binary tree datastructure in tree.
+ * @param m The name of the binary tree data structure in tree.
  * @param compare_func callback for comparison.
  * @param compare_key_func callback for comparison.
  * @return The node removed on success, NULL on error.
@@ -104,7 +140,7 @@ typedef struct	btree_s
  * Graft a subtree in a binary tree.
  * @param tree The root of the tree.
  * @param subtree subtree to be graft.
- * @param m The name of the binary tree datastructure in tree.
+ * @param m The name of the binary tree data structure in tree.
  * @param compare_func callback for comparison.
  * @return true on success, false on error.
  * @note A subtree that has nodes which are also in tree can be grafted.
@@ -120,7 +156,7 @@ typedef struct	btree_s
  * Prune a binary tree.
  * @param tree The root of the tree.
  * @param key key of the part of the tree to be pruned.
- * @param m The name of the binary tree datastructure in tree.
+ * @param m The name of the binary tree data structure in tree.
  * @param compare_key_func callback for comparison.
  * @return The subtree on success, NULL on error.
  */
@@ -131,109 +167,158 @@ typedef struct	btree_s
 		     compare_key_func)
 
 /**
- * Step along the tree in a preorder fashion.
+ * Step along the tree in a pre-order fashion.
  * @param tree The root of the tree.
- * @param m The name of the binary tree datastructure in tree.
+ * @param m The name of the binary tree data structure in tree.
  * @param walk_func Callback used like an iterator. Called for every nodes.
  * @param data arbitrary data for callbacks.
  */
 #define	btree_walk_preorder(tree, m, walk_func, data)						\
-		_binary_tree_walk_preorder((void **)&(tree),								\
+		_btree_walk_preorder((void **)&(tree),								\
 							(unsigned int)offsetof(typeof(*(tree)), m),	\
 							walk_func,										\
 							(void *)(data))
 
 /**
- * Step along the tree in a inorder fashion.
+ * Step along the tree in a in-order fashion.
  * @param tree The root of the tree.
- * @param m The name of the binary tree datastructure in tree.
+ * @param m The name of the binary tree data structure in tree.
  * @param walk_func Callback used like an iterator. Called for every nodes.
  * @param data arbitrary data for callbacks.
  */
 #define	btree_walk_inorder(tree, m, walk_func, data)						\
-		_binary_tree_walk_inorder((void **)&(tree),								\
+		_btree_walk_inorder((void **)&(tree),								\
 							(unsigned int)offsetof(typeof(*(tree)), m),	\
 							walk_func,										\
 							(void *)(data))
 
 /**
- * Step along the tree in a postorder fashion.
+ * Step along the tree in a post-order fashion.
  * @param tree The root of the tree.
- * @param m The name of the binary tree datastructure in tree.
+ * @param m The name of the binary tree data structure in tree.
  * @param walk_func Callback used like an iterator. Called for every nodes.
  * @param data arbitrary data for callbacks.
  */
 #define	btree_walk_postorder(tree, m, walk_func, data)						\
-		_binary_tree_walk_postorder((void **)&(tree),						\
+		_btree_walk_postorder((void **)&(tree),						\
 							(unsigned int)offsetof(typeof(*(tree)), m),	\
 							walk_func,										\
 							(void *)(data))
 
+/* Implementation. */
 
-/* tree implementation. */
 
 /**
  * Initialize a binary tree node.
  * @param tree The root of the tree.
- * @param m The offset of the binary tree datastructure in tree.
+ * @param m The offset of the binary tree data structure in tree.
  * @return true on success, false on error.
  */
-bool	_btree_init(void *tree,
-		    unsigned int m);
+bool    _btree_init(void *tree,
+            unsigned int m);
 /**
  * Insert a binary tree node.
  * @param tree The root of the tree.
  * @param new The node to be added.
- * @param m The offset of the binary tree datastructure in tree.
+ * @param m The offset of the binary tree data structure in tree.
  * @param compare_func callback for comparison.
  * @return true on success, false on error.
  */
-bool	_btree_insert(void **tree,
-		      void *new,
-		      unsigned int m,
-		      btree_compare_p compare_func);
+bool    _btree_insert(void **tree,
+              void *new,
+              unsigned int m,
+              btree_compare_p compare_func);
 
 /**
  * Remove a binary tree node.
  * @param tree The root of the tree.
  * @param key Key to the node to be removed.
- * @param m The offset of the binary tree datastructure in tree.
+ * @param m The offset of the binary tree data structure in tree.
  * @param compare_func callback for comparison.
  * @param compare_key_func callback for comparison.
  * @return The node removed on success, NULL on error.
  */
-void	*_btree_remove(void **tree,
-		      void *key,
-		      unsigned int m,
-		      btree_compare_p compare_func,
-		      btree_compare_key_p compare_key_func);
+void    *_btree_remove(void **tree,
+              void *key,
+              unsigned int m,
+              btree_compare_p compare_func,
+              btree_compare_key_p compare_key_func);
 
 /**
  * Graft a subtree in a binary tree.
  * @param tree The root of the tree.
  * @param subtree subtree to be graft.
- * @param m The offset of the binary tree datastructure in tree.
+ * @param m The offset of the binary tree data structure in tree.
  * @param compare_func callback for comparison.
  * @return true on success, false on error.
  * @note A subtree that has nodes which are also in tree can be grafted.
  * this preliminary control is left to the caller.
  */
-bool	_btree_graft(void **tree,
-		     void *subtree,
-		     unsigned int m,
-		     btree_compare_p compare_func);
+bool    _btree_graft(void **tree,
+             void *subtree,
+             unsigned int m,
+             btree_compare_p compare_func);
 
 /**
  * Prune a binary tree.
  * @param tree The root of the tree.
  * @param key key of the part of the tree to be pruned.
- * @param m The offset of the binary tree datastructure in tree.
+ * @param m The offset of the binary tree data structure in tree.
  * @param compare_key_func callback for comparison.
  * @return The subtree on success, NULL on error.
  */
-void	*_btree_prune(void **tree,
-		     void *key,
-		     unsigned int m,
-		     btree_compare_key_p compare_key_func);
+void    *_btree_prune(void **tree,
+             void *key,
+             unsigned int m,
+             btree_compare_key_p compare_key_func);
+
+/**
+ * Look for a node in a binary tree.
+ * @param tree The root of the tree.
+ * @param key Key to the node to look for.
+ * @param m The offset of the binary tree data structure in tree.
+ * @param compare_key_func callback for comparison.
+ * @return The node looked up on success, NULL on error.
+ */
+void    *_btree_lookup(void **tree,
+               void *key,
+               unsigned int m,
+               btree_compare_key_p compare_key_func);
+
+/**
+ * Step along the tree in a pre-order fashion.
+ * @param tree The root of the tree.
+ * @param m The offset of the binary tree data structure in tree.
+ * @param walk_func Callback used like an iterator. Called for every nodes.
+ * @param data arbitrary data for callbacks.
+ */
+void    _btree_walk_preorder(void **tree,
+                            unsigned int m,
+                            btree_walk_p walk_func,
+                            void *data);
+
+/**
+ * Step along the tree in a in-order fashion.
+ * @param tree The root of the tree.
+ * @param m The offset of the binary tree data structure in tree.
+ * @param walk_func Callback used like an iterator. Called for every nodes.
+ * @param data arbitrary data for callbacks.
+ */
+void    _btree_walk_inorder(void **tree,
+                            unsigned int m,
+                            btree_walk_p walk_func,
+                            void *data);
+
+/**
+ * Step along the tree in a post-order fashion.
+ * @param tree The root of the tree.
+ * @param m The offset of the binary tree data structure in tree.
+ * @param walk_func Callback used like an iterator. Called for every nodes.
+ * @param data arbitrary data for callbacks.
+ */
+void    _btree_walk_postorder(void **tree,
+                            unsigned int m,
+                            btree_walk_p walk_func,
+                            void *data);
 
 #endif /* __LIBSLDS_BINARY_BTREE_H__ */

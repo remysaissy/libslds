@@ -28,8 +28,7 @@
 
 #include	"common.h"
 
-#include	"tree/binary/common.h"
-#include	"tree/binary/binary_tree.h"
+#include	"tree/binary/btree.h"
 #include	"tree/binary/splay_tree.h"
 
 #include  "tree/nary/common.h"

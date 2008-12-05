@@ -13,9 +13,9 @@ void    *avl_single_rotate_with_left(void *node,
 {
   void  *tmp;
 
-  tmp = GET_FIELD(node, m, binary_tree_base_t)->left;
-  GET_FIELD(node, m, binary_tree_base_t)->left = GET_FIELD(tmp, m, binary_tree_base_t)->right;
-  GET_FIELD(tmp, m, binary_tree_base_t)->right = node;
+  tmp = GET_FIELD(node, m, btree_t)->left;
+  GET_FIELD(node, m, btree_t)->left = GET_FIELD(tmp, m, btree_t)->right;
+  GET_FIELD(tmp, m, btree_t)->right = node;
   return (tmp);
 }
 
@@ -24,8 +24,8 @@ void    *avl_single_rotate_with_right(void *node,
 {
   void  *tmp;
 
-  tmp = GET_FIELD(node, m, binary_tree_base_t)->right;
-  GET_FIELD(node, m, binary_tree_base_t)->right = GET_FIELD(tmp, m, binary_tree_base_t)->left;
-  GET_FIELD(tmp, m, binary_tree_base_t)->left = node;
+  tmp = GET_FIELD(node, m, btree_t)->right;
+  GET_FIELD(node, m, btree_t)->right = GET_FIELD(tmp, m, btree_t)->left;
+  GET_FIELD(tmp, m, btree_t)->left = node;
   return (tmp);
 }

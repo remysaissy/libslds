@@ -102,8 +102,8 @@ void Testbinary_tree_insert(CuTest *tc)
     CuAssertTrue(tc, ret);
     elem = root;
     CuAssertIntEquals(tc, 2, elem->key);
-    CuAssertIntEquals(tc, 1, ((test_tree_t *)elem->btree._btree_base.left)->key);
-    CuAssertIntEquals(tc, 3, ((test_tree_t *)elem->btree._btree_base.right)->key);
+    CuAssertIntEquals(tc, 1, ((test_tree_t *)elem->btree.left)->key);
+    CuAssertIntEquals(tc, 3, ((test_tree_t *)elem->btree.right)->key);
   }
 
 void Testbinary_tree_lookup(CuTest *tc)

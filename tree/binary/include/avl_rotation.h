@@ -12,8 +12,6 @@
  * This header contains declaration for avl rotations in the libslds.
  */
 
-#include <tree/binary/common.h>
-
 void    *avl_single_rotate_with_left(void *node,
                                      unsigned int m);
 
