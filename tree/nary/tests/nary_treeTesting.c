@@ -25,16 +25,16 @@
 
 #include	<tree.h>
 
-typedef struct test_tree_s
+typedef struct test_nary_tree_s
   {
     char  *key;
     ntree_t ntree;
 
-  } test_tree_t;
+  } test_nary_tree_t;
 
 static int NTREE_COMPARE(void *tree_node, void *path, int *iterator, void *data)
   {
-    test_tree_t *current_node = (test_tree_t *)tree_node;
+    test_nary_tree_t *current_node = (test_nary_tree_t *)tree_node;
     char		      *key = (char *)path;
     int           end_position;
     char          *p;
@@ -61,7 +61,7 @@ static void            *NTREE_ADD_NEW_NODE(void *path, int iterator, void *data)
   char          *key = (char *)path;
   int           end_position;
   char          *p;
-  test_tree_t   *elem;
+  test_nary_tree_t   *elem;
 
   if (iterator >= strlen(path))
     return (NULL);
@@ -82,7 +82,7 @@ static void            *NTREE_ADD_NEW_NODE(void *path, int iterator, void *data)
 
 static void				NTREE_REMOVE_NODE(void *node, void *data)
 {
-	test_tree_t			*n = (test_tree_t *)node;
+	test_nary_tree_t			*n = (test_nary_tree_t *)node;
 
 	free(n->key);
 	free(n);
@@ -90,7 +90,7 @@ static void				NTREE_REMOVE_NODE(void *node, void *data)
 
 void Testnary_tree_init(CuTest *tc)
   {
-    test_tree_t test;
+    test_nary_tree_t test;
     bool ret;
 
     ret = _ntree_init(NULL, 0);
@@ -101,8 +101,8 @@ void Testnary_tree_init(CuTest *tc)
 
 void Testnary_tree_insert(CuTest *tc)
   {
-  test_tree_t *root;
-  test_tree_t *elem;
+  test_nary_tree_t *root;
+  test_nary_tree_t *elem;
   bool        ret;
 
   root = NULL;
@@ -126,8 +126,8 @@ void Testnary_tree_insert(CuTest *tc)
 
 void Testnary_tree_lookup(CuTest *tc)
   {
-	  test_tree_t *root;
-	  test_tree_t *elem;
+	  test_nary_tree_t *root;
+	  test_nary_tree_t *elem;
 	  bool        ret;
 
 	  root = NULL;
@@ -159,8 +159,8 @@ void Testnary_tree_lookup(CuTest *tc)
 
 void Testnary_tree_remove(CuTest *tc)
   {
-	  test_tree_t *root;
-	  test_tree_t *elem;
+	  test_nary_tree_t *root;
+	  test_nary_tree_t *elem;
 	  bool        ret;
 
 	  root = NULL;
@@ -212,7 +212,7 @@ static int prev_value;
 
 static void	ntree_walk_preorder_cb(void *node, void *data)
 {
-	test_tree_t	*n = (test_tree_t *)node;
+	test_nary_tree_t	*n = (test_nary_tree_t *)node;
 
 	switch (prev_value)
 	{
@@ -270,8 +270,8 @@ static void	ntree_walk_preorder_cb(void *node, void *data)
 
 void Testnary_tree_walk_preorder(CuTest *tc)
   {
-	  test_tree_t *root;
-	  test_tree_t *elem;
+	  test_nary_tree_t *root;
+	  test_nary_tree_t *elem;
 	  bool        ret;
 
 	  root = NULL;
@@ -304,7 +304,7 @@ void Testnary_tree_walk_preorder(CuTest *tc)
 
 static void	ntree_walk_inorder_cb(void *node, void *data)
 {
-	test_tree_t	*n = (test_tree_t *)node;
+	test_nary_tree_t	*n = (test_nary_tree_t *)node;
 
 	switch (prev_value)
 	{
@@ -362,8 +362,8 @@ static void	ntree_walk_inorder_cb(void *node, void *data)
 
 void Testnary_tree_walk_inorder(CuTest *tc)
   {
-	  test_tree_t *root;
-	  test_tree_t *elem;
+	  test_nary_tree_t *root;
+	  test_nary_tree_t *elem;
 	  bool        ret;
 
 	  root = NULL;
@@ -396,7 +396,7 @@ void Testnary_tree_walk_inorder(CuTest *tc)
 
 static void	ntree_walk_postorder_cb(void *node, void *data)
 {
-	test_tree_t	*n = (test_tree_t *)node;
+	test_nary_tree_t	*n = (test_nary_tree_t *)node;
 
 	switch (prev_value)
 	{
@@ -454,8 +454,8 @@ static void	ntree_walk_postorder_cb(void *node, void *data)
 
 void Testnary_tree_walk_postorder(CuTest *tc)
   {
-	  test_tree_t *root;
-	  test_tree_t *elem;
+	  test_nary_tree_t *root;
+	  test_nary_tree_t *elem;
 	  bool        ret;
 
 	  root = NULL;
@@ -488,9 +488,9 @@ void Testnary_tree_walk_postorder(CuTest *tc)
 
 void Testnary_tree_graft(CuTest *tc)
   {
-	  test_tree_t 	*root1;
-	  test_tree_t	*root2;
-	  test_tree_t 	*elem;
+	  test_nary_tree_t 	*root1;
+	  test_nary_tree_t	*root2;
+	  test_nary_tree_t 	*elem;
 	  bool        	ret;
 
 	  root1 = NULL;
@@ -516,9 +516,9 @@ void Testnary_tree_graft(CuTest *tc)
 
 void Testnary_tree_prune(CuTest *tc)
   {
-	  test_tree_t 	*root1;
-	  test_tree_t	*root2;
-	  test_tree_t 	*elem;
+	  test_nary_tree_t 	*root1;
+	  test_nary_tree_t	*root2;
+	  test_nary_tree_t 	*elem;
 	  bool        	ret;
 
 	  root1 = NULL;

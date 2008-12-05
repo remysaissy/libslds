@@ -30,6 +30,7 @@
 
 #include	"tree/binary/btree.h"
 #include	"tree/binary/splay_tree.h"
+#include    "tree/binary/redblack_tree.h"
 
 #include  "tree/nary/common.h"
 #include  "tree/nary/nary_tree.h"

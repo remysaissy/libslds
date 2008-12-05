@@ -146,7 +146,7 @@ typedef btree_t splay_tree_t;
 /**
  * Step along the tree in a post-order fashion.
  * @param tree The root of the tree.
- * @param m The name of the splay tree datas tructure in tree.
+ * @param m The name of the splay tree data structure in tree.
  * @param walk_func Callback used like an iterator. Called for every nodes.
  * @param data arbitrary data for callbacks.
  */
