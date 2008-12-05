@@ -49,23 +49,18 @@ static void *__splay(void **tree,
                       unsigned int m,
                       btree_compare_key_p compare_key_func)
 {
-//  void  *left_tree_max;
-//  void  *right_tree_min;
   int   diff;
   int   diff2;
   void  *tmp;
 
-//  left_tree_max = node;
-//  right_tree_min = node;
-
   /*
-   *     Case 1. If the parent of n () is the root, rotate at n - i.e. apply the rotation that makes n the tree's root, and makes its former parent into its child.
-
-    The next two cases affect both n and its two immediate ancestors (also ).
-
-    Case 2. If n and its parent p have the same orientation - i.e. they are both left or both right childrent - first rotate at p and then at n.
-
-    Case 3. On the other hand, if n and its parent p have different orientations - then rotate twice at n.
+   *
+   * Case 1. If the parent of n () is the root, rotate at n - i.e. apply the rotation that makes n the tree's root, and makes its former parent into its child.
+   *  The next two cases affect both n and its two immediate ancestors (also ).
+   *
+   * Case 2. If n and its parent p have the same orientation - i.e. they are both left or both right childrent - first rotate at p and then at n.
+   *
+   * Case 3. On the other hand, if n and its parent p have different orientations - then rotate twice at n.
    *
    */
 
@@ -86,16 +81,7 @@ static void *__splay(void **tree,
         tmp = GET_FIELD(*tree, m, splay_tree_t)->_btree_base.left;
         tmp = __single_rotate_with_right(tmp, m);
         GET_FIELD(*tree, m, splay_tree_t)->_btree_base.left = tmp;
-//        *tree = __single_rotate_with_left(*tree, m);
       }
-
-//      if (GET_FIELD(*tree, m, splay_tree_t)->_btree_base.left != NULL && compare_key_func(GET_FIELD(*tree, m, splay_tree_t)->_btree_base.left, key) != BTREE_LEFT)
-//        *tree = __single_rotate_with_left(*tree, m);
-//      if (GET_FIELD(*tree, m, splay_tree_t)->_btree_base.left == NULL)
-//        break;
-//      GET_FIELD(right_tree_min, m, splay_tree_t)->_btree_base.left = *tree;
-//      right_tree_min = *tree;
-//      *tree = GET_FIELD(*tree, m, splay_tree_t)->_btree_base.left;
     }
     else
     {
@@ -112,23 +98,9 @@ static void *__splay(void **tree,
         tmp = GET_FIELD(*tree, m, splay_tree_t)->_btree_base.right;
         tmp = __single_rotate_with_left(tmp, m);
         GET_FIELD(*tree, m, splay_tree_t)->_btree_base.right = tmp;
-//        *tree = __single_rotate_with_right(*tree, m);
       }
-
-
-//      if (GET_FIELD(*tree, m, splay_tree_t)->_btree_base.right != NULL && compare_key_func(GET_FIELD(*tree, m, splay_tree_t)->_btree_base.right, key) != BTREE_RIGHT)
-//        *tree = __single_rotate_with_right(*tree, m);
-//      if (GET_FIELD(*tree, m, splay_tree_t)->_btree_base.right == NULL)
-//        break;
-//      GET_FIELD(left_tree_max, m, splay_tree_t)->_btree_base.right = *tree;
-//      left_tree_max = *tree;
-//      *tree = GET_FIELD(*tree, m, splay_tree_t)->_btree_base.right;
     }
   }
-//  GET_FIELD(left_tree_max, m, splay_tree_t)->_btree_base.right = GET_FIELD(*tree, m, splay_tree_t)->_btree_base.left;
-//  GET_FIELD(right_tree_min, m, splay_tree_t)->_btree_base.left = GET_FIELD(*tree, m, splay_tree_t)->_btree_base.right;
-//  GET_FIELD(*tree, m, splay_tree_t)->_btree_base.left = GET_FIELD(node, m, splay_tree_t)->_btree_base.right;
-//  GET_FIELD(*tree, m, splay_tree_t)->_btree_base.right = GET_FIELD(node, m, splay_tree_t)->_btree_base.left;
   return (*tree);
 }
 
