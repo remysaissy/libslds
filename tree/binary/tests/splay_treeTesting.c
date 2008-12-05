@@ -48,6 +48,9 @@ static btree_compare_e BTREE_COMPARE_KEY(void *n1, void *key)
     int k = (int)key;
     test_tree_t *bt1 = (test_tree_t *)n1;
 
+//    printf("k: %p bt: %p\n", key, n1);
+//    if (n1 == NULL)
+//      __asm__ volatile ("int $0x3");
     if (k < bt1->key)
       return (BTREE_LEFT);
     if (k > bt1->key)
@@ -106,6 +109,347 @@ void Testsplay_tree_insert(CuTest *tc)
     CuAssertIntEquals(tc, 3, ((test_tree_t *)elem->splay_tree._btree_base.right)->key);
   }
 
+void Testsplay_tree_left_zig_step_lookup(CuTest *tc)
+  {
+    test_tree_t *root;
+    test_tree_t *elem;
+    int i;
+    bool ret;
+
+    root = NULL;
+    elem = malloc(sizeof(*elem));
+    elem->key = 4;
+    ret = splay_tree_insert(root, elem, splay_tree, BTREE_COMPARE);
+    CuAssertTrue(tc, ret);
+    elem = malloc(sizeof(*elem));
+    elem->key = 5;
+    ret = splay_tree_insert(root, elem, splay_tree, BTREE_COMPARE);
+    CuAssertTrue(tc, ret);
+    elem = malloc(sizeof(*elem));
+    elem->key = 2;
+    ret = splay_tree_insert(root, elem, splay_tree, BTREE_COMPARE);
+    CuAssertTrue(tc, ret);
+    elem = malloc(sizeof(*elem));
+    elem->key = 1;
+    ret = splay_tree_insert(root, elem, splay_tree, BTREE_COMPARE);
+    CuAssertTrue(tc, ret);
+    elem = malloc(sizeof(*elem));
+    elem->key = 3;
+    ret = splay_tree_insert(root, elem, splay_tree, BTREE_COMPARE);
+    CuAssertTrue(tc, ret);
+    CuAssertPtrNotNull(tc, root);
+    CuAssertIntEquals(tc, 4, root->key);
+    CuAssertIntEquals(tc, 5, ((test_tree_t *)root->splay_tree._btree_base.right)->key);
+    CuAssertIntEquals(tc, 2, ((test_tree_t *)root->splay_tree._btree_base.left)->key);
+    CuAssertIntEquals(tc, 1, ((test_tree_t *)((test_tree_t *)root->splay_tree._btree_base.left)->splay_tree._btree_base.left)->key);
+    CuAssertIntEquals(tc, 3, ((test_tree_t *)((test_tree_t *)root->splay_tree._btree_base.left)->splay_tree._btree_base.right)->key);
+    elem = splay_tree_lookup(root, 2, splay_tree, BTREE_COMPARE_KEY);
+    CuAssertPtrNotNull(tc, elem);
+    CuAssertIntEquals(tc, 2, root->key);
+    CuAssertIntEquals(tc, 1, ((test_tree_t *)root->splay_tree._btree_base.left)->key);
+    CuAssertIntEquals(tc, 4, ((test_tree_t *)root->splay_tree._btree_base.right)->key);
+    CuAssertIntEquals(tc, 3, ((test_tree_t *)((test_tree_t *)root->splay_tree._btree_base.right)->splay_tree._btree_base.left)->key);
+    CuAssertIntEquals(tc, 5, ((test_tree_t *)((test_tree_t *)root->splay_tree._btree_base.right)->splay_tree._btree_base.right)->key);
+        for (i = 1; i < 6; i++)
+      {
+        elem = splay_tree_remove(root, i, splay_tree, BTREE_COMPARE, BTREE_COMPARE_KEY);
+        free(elem);
+      }
+  }
+
+void Testsplay_tree_right_zig_step_lookup(CuTest *tc)
+  {
+    test_tree_t *root;
+    test_tree_t *elem;
+    int i;
+    bool ret;
+
+    root = NULL;
+    elem = malloc(sizeof(*elem));
+    elem->key = 2;
+    ret = splay_tree_insert(root, elem, splay_tree, BTREE_COMPARE);
+    CuAssertTrue(tc, ret);
+    elem = malloc(sizeof(*elem));
+    elem->key = 1;
+    ret = splay_tree_insert(root, elem, splay_tree, BTREE_COMPARE);
+    CuAssertTrue(tc, ret);
+    elem = malloc(sizeof(*elem));
+    elem->key = 4;
+    ret = splay_tree_insert(root, elem, splay_tree, BTREE_COMPARE);
+    CuAssertTrue(tc, ret);
+    elem = malloc(sizeof(*elem));
+    elem->key = 3;
+    ret = splay_tree_insert(root, elem, splay_tree, BTREE_COMPARE);
+    CuAssertTrue(tc, ret);
+    elem = malloc(sizeof(*elem));
+    elem->key = 5;
+    ret = splay_tree_insert(root, elem, splay_tree, BTREE_COMPARE);
+    CuAssertTrue(tc, ret);
+    CuAssertPtrNotNull(tc, root);
+    CuAssertIntEquals(tc, 2, root->key);
+    CuAssertIntEquals(tc, 1, ((test_tree_t *)root->splay_tree._btree_base.left)->key);
+    CuAssertIntEquals(tc, 4, ((test_tree_t *)root->splay_tree._btree_base.right)->key);
+    CuAssertIntEquals(tc, 3, ((test_tree_t *)((test_tree_t *)root->splay_tree._btree_base.right)->splay_tree._btree_base.left)->key);
+    CuAssertIntEquals(tc, 5, ((test_tree_t *)((test_tree_t *)root->splay_tree._btree_base.right)->splay_tree._btree_base.right)->key);
+    elem = splay_tree_lookup(root, 4, splay_tree, BTREE_COMPARE_KEY);
+    CuAssertPtrNotNull(tc, elem);
+    CuAssertIntEquals(tc, 4, root->key);
+    CuAssertIntEquals(tc, 5, ((test_tree_t *)root->splay_tree._btree_base.right)->key);
+    CuAssertIntEquals(tc, 2, ((test_tree_t *)root->splay_tree._btree_base.left)->key);
+    CuAssertIntEquals(tc, 1, ((test_tree_t *)((test_tree_t *)root->splay_tree._btree_base.left)->splay_tree._btree_base.left)->key);
+    CuAssertIntEquals(tc, 3, ((test_tree_t *)((test_tree_t *)root->splay_tree._btree_base.left)->splay_tree._btree_base.right)->key);
+    for (i = 1; i < 6; i++)
+      {
+        elem = splay_tree_remove(root, i, splay_tree, BTREE_COMPARE, BTREE_COMPARE_KEY);
+        free(elem);
+      }
+  }
+
+void Testsplay_tree_left_zig_zig_step_lookup(CuTest *tc)
+  {
+    test_tree_t *root;
+    test_tree_t *elem;
+    int i;
+    bool ret;
+
+    root = NULL;
+    elem = malloc(sizeof(*elem));
+    elem->key = 6;
+    ret = splay_tree_insert(root, elem, splay_tree, BTREE_COMPARE);
+    CuAssertTrue(tc, ret);
+    elem = malloc(sizeof(*elem));
+    elem->key = 7;
+    ret = splay_tree_insert(root, elem, splay_tree, BTREE_COMPARE);
+    CuAssertTrue(tc, ret);
+    elem = malloc(sizeof(*elem));
+    elem->key = 4;
+    ret = splay_tree_insert(root, elem, splay_tree, BTREE_COMPARE);
+    CuAssertTrue(tc, ret);
+    elem = malloc(sizeof(*elem));
+    elem->key = 5;
+    ret = splay_tree_insert(root, elem, splay_tree, BTREE_COMPARE);
+    CuAssertTrue(tc, ret);
+    elem = malloc(sizeof(*elem));
+    elem->key = 2;
+    ret = splay_tree_insert(root, elem, splay_tree, BTREE_COMPARE);
+    CuAssertTrue(tc, ret);
+    elem = malloc(sizeof(*elem));
+    elem->key = 3;
+    ret = splay_tree_insert(root, elem, splay_tree, BTREE_COMPARE);
+    CuAssertTrue(tc, ret);
+    elem = malloc(sizeof(*elem));
+    elem->key = 1;
+    ret = splay_tree_insert(root, elem, splay_tree, BTREE_COMPARE);
+    CuAssertTrue(tc, ret);
+    CuAssertPtrNotNull(tc, root);
+    CuAssertIntEquals(tc, 6, root->key);
+    CuAssertIntEquals(tc, 7, ((test_tree_t *)root->splay_tree._btree_base.right)->key);
+    CuAssertIntEquals(tc, 4, ((test_tree_t *)root->splay_tree._btree_base.left)->key);
+    CuAssertIntEquals(tc, 5, ((test_tree_t *)((test_tree_t *)root->splay_tree._btree_base.left)->splay_tree._btree_base.right)->key);
+    CuAssertIntEquals(tc, 2, ((test_tree_t *)((test_tree_t *)root->splay_tree._btree_base.left)->splay_tree._btree_base.left)->key);
+    CuAssertIntEquals(tc, 3, ((test_tree_t *)((test_tree_t *)((test_tree_t *)root->splay_tree._btree_base.left)->splay_tree._btree_base.left)->splay_tree._btree_base.right)->key);
+    CuAssertIntEquals(tc, 1, ((test_tree_t *)((test_tree_t *)((test_tree_t *)root->splay_tree._btree_base.left)->splay_tree._btree_base.left)->splay_tree._btree_base.left)->key);
+    elem = splay_tree_lookup(root, 2, splay_tree, BTREE_COMPARE_KEY);
+    CuAssertPtrNotNull(tc, elem);
+    CuAssertIntEquals(tc, 2, root->key);
+    CuAssertIntEquals(tc, 1, ((test_tree_t *)root->splay_tree._btree_base.left)->key);
+    CuAssertIntEquals(tc, 4, ((test_tree_t *)root->splay_tree._btree_base.right)->key);
+    CuAssertIntEquals(tc, 3, ((test_tree_t *)((test_tree_t *)root->splay_tree._btree_base.right)->splay_tree._btree_base.left)->key);
+    CuAssertIntEquals(tc, 6, ((test_tree_t *)((test_tree_t *)root->splay_tree._btree_base.right)->splay_tree._btree_base.right)->key);
+    CuAssertIntEquals(tc, 5, ((test_tree_t *)((test_tree_t *)((test_tree_t *)root->splay_tree._btree_base.right)->splay_tree._btree_base.right)->splay_tree._btree_base.left)->key);
+    CuAssertIntEquals(tc, 7, ((test_tree_t *)((test_tree_t *)((test_tree_t *)root->splay_tree._btree_base.right)->splay_tree._btree_base.right)->splay_tree._btree_base.right)->key);
+        for (i = 1; i < 8; i++)
+      {
+        elem = splay_tree_remove(root, i, splay_tree, BTREE_COMPARE, BTREE_COMPARE_KEY);
+        free(elem);
+      }
+  }
+
+void Testsplay_tree_right_zig_zig_step_lookup(CuTest *tc)
+  {
+  test_tree_t *root;
+  test_tree_t *elem;
+  int i;
+  bool ret;
+
+  root = NULL;
+  elem = malloc(sizeof(*elem));
+  elem->key = 2;
+  ret = splay_tree_insert(root, elem, splay_tree, BTREE_COMPARE);
+  CuAssertTrue(tc, ret);
+  elem = malloc(sizeof(*elem));
+  elem->key = 1;
+  ret = splay_tree_insert(root, elem, splay_tree, BTREE_COMPARE);
+  CuAssertTrue(tc, ret);
+  elem = malloc(sizeof(*elem));
+  elem->key = 4;
+  ret = splay_tree_insert(root, elem, splay_tree, BTREE_COMPARE);
+  CuAssertTrue(tc, ret);
+  elem = malloc(sizeof(*elem));
+  elem->key = 3;
+  ret = splay_tree_insert(root, elem, splay_tree, BTREE_COMPARE);
+  CuAssertTrue(tc, ret);
+  elem = malloc(sizeof(*elem));
+  elem->key = 6;
+  ret = splay_tree_insert(root, elem, splay_tree, BTREE_COMPARE);
+  CuAssertTrue(tc, ret);
+  elem = malloc(sizeof(*elem));
+  elem->key = 5;
+  ret = splay_tree_insert(root, elem, splay_tree, BTREE_COMPARE);
+  CuAssertTrue(tc, ret);
+  elem = malloc(sizeof(*elem));
+  elem->key = 7;
+  ret = splay_tree_insert(root, elem, splay_tree, BTREE_COMPARE);
+  CuAssertTrue(tc, ret);
+  CuAssertPtrNotNull(tc, root);
+  CuAssertIntEquals(tc, 2, root->key);
+  CuAssertIntEquals(tc, 1, ((test_tree_t *)root->splay_tree._btree_base.left)->key);
+  CuAssertIntEquals(tc, 4, ((test_tree_t *)root->splay_tree._btree_base.right)->key);
+  CuAssertIntEquals(tc, 3, ((test_tree_t *)((test_tree_t *)root->splay_tree._btree_base.right)->splay_tree._btree_base.left)->key);
+  CuAssertIntEquals(tc, 6, ((test_tree_t *)((test_tree_t *)root->splay_tree._btree_base.right)->splay_tree._btree_base.right)->key);
+  CuAssertIntEquals(tc, 5, ((test_tree_t *)((test_tree_t *)((test_tree_t *)root->splay_tree._btree_base.right)->splay_tree._btree_base.right)->splay_tree._btree_base.left)->key);
+  CuAssertIntEquals(tc, 7, ((test_tree_t *)((test_tree_t *)((test_tree_t *)root->splay_tree._btree_base.right)->splay_tree._btree_base.right)->splay_tree._btree_base.right)->key);
+  elem = splay_tree_lookup(root, 6, splay_tree, BTREE_COMPARE_KEY);
+  CuAssertPtrNotNull(tc, elem);
+  CuAssertIntEquals(tc, 6, root->key);
+  CuAssertIntEquals(tc, 7, ((test_tree_t *)root->splay_tree._btree_base.right)->key);
+  CuAssertIntEquals(tc, 4, ((test_tree_t *)root->splay_tree._btree_base.left)->key);
+  CuAssertIntEquals(tc, 5, ((test_tree_t *)((test_tree_t *)root->splay_tree._btree_base.left)->splay_tree._btree_base.right)->key);
+  CuAssertIntEquals(tc, 2, ((test_tree_t *)((test_tree_t *)root->splay_tree._btree_base.left)->splay_tree._btree_base.left)->key);
+  CuAssertIntEquals(tc, 3, ((test_tree_t *)((test_tree_t *)((test_tree_t *)root->splay_tree._btree_base.left)->splay_tree._btree_base.left)->splay_tree._btree_base.right)->key);
+  CuAssertIntEquals(tc, 1, ((test_tree_t *)((test_tree_t *)((test_tree_t *)root->splay_tree._btree_base.left)->splay_tree._btree_base.left)->splay_tree._btree_base.left)->key);
+  for (i = 1; i < 8; i++)
+    {
+      elem = splay_tree_remove(root, i, splay_tree, BTREE_COMPARE, BTREE_COMPARE_KEY);
+      free(elem);
+    }
+  }
+
+
+void Testsplay_tree_left_zig_zag_step_lookup(CuTest *tc)
+  {
+    test_tree_t *root;
+    test_tree_t *elem;
+    int i;
+    bool ret;
+
+    root = NULL;
+    elem = malloc(sizeof(*elem));
+    elem->key = 6;
+    ret = splay_tree_insert(root, elem, splay_tree, BTREE_COMPARE);
+    CuAssertTrue(tc, ret);
+    elem = malloc(sizeof(*elem));
+    elem->key = 7;
+    ret = splay_tree_insert(root, elem, splay_tree, BTREE_COMPARE);
+    CuAssertTrue(tc, ret);
+    elem = malloc(sizeof(*elem));
+    elem->key = 2;
+    ret = splay_tree_insert(root, elem, splay_tree, BTREE_COMPARE);
+    CuAssertTrue(tc, ret);
+    elem = malloc(sizeof(*elem));
+    elem->key = 1;
+    ret = splay_tree_insert(root, elem, splay_tree, BTREE_COMPARE);
+    CuAssertTrue(tc, ret);
+    elem = malloc(sizeof(*elem));
+    elem->key = 4;
+    ret = splay_tree_insert(root, elem, splay_tree, BTREE_COMPARE);
+    CuAssertTrue(tc, ret);
+    elem = malloc(sizeof(*elem));
+    elem->key = 3;
+    ret = splay_tree_insert(root, elem, splay_tree, BTREE_COMPARE);
+    CuAssertTrue(tc, ret);
+    elem = malloc(sizeof(*elem));
+    elem->key = 5;
+    ret = splay_tree_insert(root, elem, splay_tree, BTREE_COMPARE);
+    CuAssertTrue(tc, ret);
+    CuAssertPtrNotNull(tc, root);
+    CuAssertIntEquals(tc, 6, root->key);
+    CuAssertIntEquals(tc, 7, ((test_tree_t *)root->splay_tree._btree_base.right)->key);
+    CuAssertIntEquals(tc, 2, ((test_tree_t *)root->splay_tree._btree_base.left)->key);
+    CuAssertIntEquals(tc, 1, ((test_tree_t *)((test_tree_t *)root->splay_tree._btree_base.left)->splay_tree._btree_base.left)->key);
+    CuAssertIntEquals(tc, 4, ((test_tree_t *)((test_tree_t *)root->splay_tree._btree_base.left)->splay_tree._btree_base.right)->key);
+    CuAssertIntEquals(tc, 3, ((test_tree_t *)((test_tree_t *)((test_tree_t *)root->splay_tree._btree_base.left)->splay_tree._btree_base.right)->splay_tree._btree_base.left)->key);
+    CuAssertIntEquals(tc, 5, ((test_tree_t *)((test_tree_t *)((test_tree_t *)root->splay_tree._btree_base.left)->splay_tree._btree_base.right)->splay_tree._btree_base.right)->key);
+    elem = splay_tree_lookup(root, 4, splay_tree, BTREE_COMPARE_KEY);
+    CuAssertPtrNotNull(tc, elem);
+    CuAssertIntEquals(tc, 4, root->key);
+    CuAssertIntEquals(tc, 2, ((test_tree_t *)root->splay_tree._btree_base.left)->key);
+    CuAssertIntEquals(tc, 1, ((test_tree_t *)((test_tree_t *)root->splay_tree._btree_base.left)->splay_tree._btree_base.left)->key);
+    CuAssertIntEquals(tc, 3, ((test_tree_t *)((test_tree_t *)root->splay_tree._btree_base.left)->splay_tree._btree_base.right)->key);
+    CuAssertIntEquals(tc, 6, ((test_tree_t *)root->splay_tree._btree_base.right)->key);
+    CuAssertIntEquals(tc, 5, ((test_tree_t *)((test_tree_t *)root->splay_tree._btree_base.right)->splay_tree._btree_base.left)->key);
+    CuAssertIntEquals(tc, 7, ((test_tree_t *)((test_tree_t *)root->splay_tree._btree_base.right)->splay_tree._btree_base.right)->key);
+        for (i = 1; i < 8; i++)
+      {
+        elem = splay_tree_remove(root, i, splay_tree, BTREE_COMPARE, BTREE_COMPARE_KEY);
+        free(elem);
+      }
+  }
+
+/* TODO: to be coded. */
+void Testsplay_tree_right_zig_zag_step_lookup(CuTest *tc)
+  {
+  test_tree_t *root;
+  test_tree_t *elem;
+  int i;
+  bool ret;
+
+  root = NULL;
+  elem = malloc(sizeof(*elem));
+  elem->key = 4;
+  ret = splay_tree_insert(root, elem, splay_tree, BTREE_COMPARE);
+  CuAssertTrue(tc, ret);
+  elem = malloc(sizeof(*elem));
+  elem->key = 2;
+  ret = splay_tree_insert(root, elem, splay_tree, BTREE_COMPARE);
+  CuAssertTrue(tc, ret);
+  elem = malloc(sizeof(*elem));
+  elem->key = 6;
+  ret = splay_tree_insert(root, elem, splay_tree, BTREE_COMPARE);
+  CuAssertTrue(tc, ret);
+  elem = malloc(sizeof(*elem));
+  elem->key = 1;
+  ret = splay_tree_insert(root, elem, splay_tree, BTREE_COMPARE);
+  CuAssertTrue(tc, ret);
+  elem = malloc(sizeof(*elem));
+  elem->key = 3;
+  ret = splay_tree_insert(root, elem, splay_tree, BTREE_COMPARE);
+  CuAssertTrue(tc, ret);
+  elem = malloc(sizeof(*elem));
+  elem->key = 5;
+  ret = splay_tree_insert(root, elem, splay_tree, BTREE_COMPARE);
+  CuAssertTrue(tc, ret);
+  elem = malloc(sizeof(*elem));
+  elem->key = 7;
+  ret = splay_tree_insert(root, elem, splay_tree, BTREE_COMPARE);
+  CuAssertTrue(tc, ret);
+  CuAssertPtrNotNull(tc, root);
+  CuAssertIntEquals(tc, 4, root->key);
+  CuAssertIntEquals(tc, 2, ((test_tree_t *)root->splay_tree._btree_base.left)->key);
+  CuAssertIntEquals(tc, 1, ((test_tree_t *)((test_tree_t *)root->splay_tree._btree_base.left)->splay_tree._btree_base.left)->key);
+  CuAssertIntEquals(tc, 3, ((test_tree_t *)((test_tree_t *)root->splay_tree._btree_base.left)->splay_tree._btree_base.right)->key);
+  CuAssertIntEquals(tc, 6, ((test_tree_t *)root->splay_tree._btree_base.right)->key);
+  CuAssertIntEquals(tc, 5, ((test_tree_t *)((test_tree_t *)root->splay_tree._btree_base.right)->splay_tree._btree_base.left)->key);
+  CuAssertIntEquals(tc, 7, ((test_tree_t *)((test_tree_t *)root->splay_tree._btree_base.right)->splay_tree._btree_base.right)->key);
+  elem = splay_tree_lookup(root, 6, splay_tree, BTREE_COMPARE_KEY);
+  CuAssertPtrNotNull(tc, elem);
+  /* TODO: This form is not the mirror of the left zig zag, something is wrong I think. */
+  CuAssertIntEquals(tc, 6, root->key);
+  CuAssertIntEquals(tc, 7, ((test_tree_t *)root->splay_tree._btree_base.right)->key);
+  CuAssertIntEquals(tc, 4, ((test_tree_t *)root->splay_tree._btree_base.left)->key);
+  CuAssertIntEquals(tc, 5, ((test_tree_t *)((test_tree_t *)root->splay_tree._btree_base.left)->splay_tree._btree_base.right)->key);
+  CuAssertIntEquals(tc, 2, ((test_tree_t *)((test_tree_t *)root->splay_tree._btree_base.left)->splay_tree._btree_base.left)->key);
+  CuAssertIntEquals(tc, 3, ((test_tree_t *)((test_tree_t *)((test_tree_t *)root->splay_tree._btree_base.left)->splay_tree._btree_base.left)->splay_tree._btree_base.right)->key);
+  CuAssertIntEquals(tc, 1, ((test_tree_t *)((test_tree_t *)((test_tree_t *)root->splay_tree._btree_base.left)->splay_tree._btree_base.left)->splay_tree._btree_base.left)->key);
+      for (i = 1; i < 8; i++)
+    {
+      elem = splay_tree_remove(root, i, splay_tree, BTREE_COMPARE, BTREE_COMPARE_KEY);
+      free(elem);
+    }
+  }
+
+
+
 void Testsplay_tree_lookup(CuTest *tc)
   {
     test_tree_t *root;
@@ -136,6 +480,7 @@ void Testsplay_tree_lookup(CuTest *tc)
         CuAssertPtrNotNull(tc, pret);
       }
   }
+
 
 void Testsplay_tree_remove(CuTest *tc)
   {
@@ -519,7 +864,6 @@ void Testsplay_tree_walk_postorder(CuTest *tc)
     CuAssertPtrEquals(tc, NULL, root);
   }
 
-
 void Testsplay_tree_graft(CuTest *tc)
   {
     test_tree_t *root1;
@@ -555,7 +899,7 @@ void Testsplay_tree_graft(CuTest *tc)
       {
         pret = splay_tree_remove(root1, i, splay_tree, BTREE_COMPARE, BTREE_COMPARE_KEY);
         CuAssertPtrNotNull(tc, pret);
-        pret = splay_tree_remove(root2, j, splay_tree, BTREE_COMPARE, BTREE_COMPARE_KEY);
+        pret = splay_tree_remove(root1, j, splay_tree, BTREE_COMPARE, BTREE_COMPARE_KEY);
         CuAssertPtrNotNull(tc, pret);
       }
   }

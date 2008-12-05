@@ -32,7 +32,6 @@
 typedef struct		splay_tree_s
 {
   binary_tree_base_t	_btree_base;
-  void			*parent; /** the parent node. */
 
 }			splay_tree_t;
 
@@ -55,7 +54,7 @@ typedef struct		splay_tree_s
  * @return The node looked up on success, NULL on error.
  */
 #define splay_tree_lookup(tree, key, m, compare_key_func)            \
-    _binary_tree_lookup((void **)&(tree),                       \
+    _splay_tree_lookup((void **)&(tree),                       \
         (void *)(key),                      \
              (unsigned int)offsetof(typeof(*(tree)), m),    \
              compare_key_func)
@@ -170,6 +169,20 @@ typedef struct		splay_tree_s
  */
 bool    _splay_tree_init(void *tree,
             unsigned int m);
+
+/**
+ * Look for a node in a splay tree.
+ * @param tree The root of the tree.
+ * @param key Key to the node to look for.
+ * @param m The offset of the binary tree data structure in tree.
+ * @param compare_key_func callback for comparison.
+ * @return The node looked up on success, NULL on error.
+ */
+void    *_splay_tree_lookup(void **tree,
+               void *key,
+               unsigned int m,
+               btree_compare_key_p compare_key_func);
+
 /**
  * Insert a splay tree node.
  * @param tree The root of the tree.

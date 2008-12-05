@@ -20,6 +20,120 @@
 
 #include    <tree.h>
 
+/* Helpers. */
+
+static  void    *__single_rotate_with_left(void *node,
+                                            unsigned int m)
+{
+  void  *tmp;
+
+  tmp = GET_FIELD(node, m, splay_tree_t)->_btree_base.left;
+  GET_FIELD(node, m, splay_tree_t)->_btree_base.left = GET_FIELD(tmp, m, splay_tree_t)->_btree_base.right;
+  GET_FIELD(tmp, m, splay_tree_t)->_btree_base.right = node;
+  return (tmp);
+}
+
+static  void    *__single_rotate_with_right(void *node,
+                                            unsigned int m)
+{
+  void  *tmp;
+
+  tmp = GET_FIELD(node, m, splay_tree_t)->_btree_base.right;
+  GET_FIELD(node, m, splay_tree_t)->_btree_base.right = GET_FIELD(tmp, m, splay_tree_t)->_btree_base.left;
+  GET_FIELD(tmp, m, splay_tree_t)->_btree_base.left = node;
+  return (tmp);
+}
+
+static void *__splay(void **tree,
+                      void *key,
+                      unsigned int m,
+                      btree_compare_key_p compare_key_func)
+{
+//  void  *left_tree_max;
+//  void  *right_tree_min;
+  int   diff;
+  int   diff2;
+  void  *tmp;
+
+//  left_tree_max = node;
+//  right_tree_min = node;
+
+  /*
+   *     Case 1. If the parent of n () is the root, rotate at n - i.e. apply the rotation that makes n the tree's root, and makes its former parent into its child.
+
+    The next two cases affect both n and its two immediate ancestors (also ).
+
+    Case 2. If n and its parent p have the same orientation - i.e. they are both left or both right childrent - first rotate at p and then at n.
+
+    Case 3. On the other hand, if n and its parent p have different orientations - then rotate twice at n.
+   *
+   */
+
+  while (*tree != NULL && (diff = compare_key_func(*tree, key)) != BTREE_MATCH)
+  {
+    if (diff == BTREE_LEFT)
+    {
+      diff2 = compare_key_func(GET_FIELD(*tree, m, splay_tree_t)->_btree_base.left, key);
+      if (diff2 == BTREE_MATCH)
+        *tree = __single_rotate_with_left(*tree, m);
+      if (diff2 == BTREE_LEFT)
+      {
+        *tree = __single_rotate_with_left(*tree, m);
+        *tree = __single_rotate_with_left(*tree, m);
+      }
+      if (diff2 == BTREE_RIGHT)
+      {
+        tmp = GET_FIELD(*tree, m, splay_tree_t)->_btree_base.left;
+        tmp = __single_rotate_with_right(tmp, m);
+        GET_FIELD(*tree, m, splay_tree_t)->_btree_base.left = tmp;
+//        *tree = __single_rotate_with_left(*tree, m);
+      }
+
+//      if (GET_FIELD(*tree, m, splay_tree_t)->_btree_base.left != NULL && compare_key_func(GET_FIELD(*tree, m, splay_tree_t)->_btree_base.left, key) != BTREE_LEFT)
+//        *tree = __single_rotate_with_left(*tree, m);
+//      if (GET_FIELD(*tree, m, splay_tree_t)->_btree_base.left == NULL)
+//        break;
+//      GET_FIELD(right_tree_min, m, splay_tree_t)->_btree_base.left = *tree;
+//      right_tree_min = *tree;
+//      *tree = GET_FIELD(*tree, m, splay_tree_t)->_btree_base.left;
+    }
+    else
+    {
+      diff2 = compare_key_func(GET_FIELD(*tree, m, splay_tree_t)->_btree_base.right, key);
+      if (diff2 == BTREE_MATCH)
+        *tree = __single_rotate_with_right(*tree, m);
+      if (diff2 == BTREE_RIGHT)
+      {
+        *tree = __single_rotate_with_right(*tree, m);
+        *tree = __single_rotate_with_right(*tree, m);
+      }
+      if (diff2 == BTREE_LEFT)
+      {
+        tmp = GET_FIELD(*tree, m, splay_tree_t)->_btree_base.right;
+        tmp = __single_rotate_with_left(tmp, m);
+        GET_FIELD(*tree, m, splay_tree_t)->_btree_base.right = tmp;
+//        *tree = __single_rotate_with_right(*tree, m);
+      }
+
+
+//      if (GET_FIELD(*tree, m, splay_tree_t)->_btree_base.right != NULL && compare_key_func(GET_FIELD(*tree, m, splay_tree_t)->_btree_base.right, key) != BTREE_RIGHT)
+//        *tree = __single_rotate_with_right(*tree, m);
+//      if (GET_FIELD(*tree, m, splay_tree_t)->_btree_base.right == NULL)
+//        break;
+//      GET_FIELD(left_tree_max, m, splay_tree_t)->_btree_base.right = *tree;
+//      left_tree_max = *tree;
+//      *tree = GET_FIELD(*tree, m, splay_tree_t)->_btree_base.right;
+    }
+  }
+//  GET_FIELD(left_tree_max, m, splay_tree_t)->_btree_base.right = GET_FIELD(*tree, m, splay_tree_t)->_btree_base.left;
+//  GET_FIELD(right_tree_min, m, splay_tree_t)->_btree_base.left = GET_FIELD(*tree, m, splay_tree_t)->_btree_base.right;
+//  GET_FIELD(*tree, m, splay_tree_t)->_btree_base.left = GET_FIELD(node, m, splay_tree_t)->_btree_base.right;
+//  GET_FIELD(*tree, m, splay_tree_t)->_btree_base.right = GET_FIELD(node, m, splay_tree_t)->_btree_base.left;
+  return (*tree);
+}
+
+/* Splay tree functions. */
+
 bool _splay_tree_init(void *tree,
     unsigned int m)
 {
@@ -30,6 +144,19 @@ bool _splay_tree_init(void *tree,
     return (true);
   }
   return (false);
+}
+
+void *_splay_tree_lookup(void **tree,
+                    void *key,
+                    unsigned int m,
+                    btree_compare_key_p compare_key_func)
+{
+  void *node;
+
+  node = _binary_tree_lookup(tree, key, m, compare_key_func);
+  if (node != NULL)
+    node = __splay(tree, key, m, compare_key_func);
+  return (node);
 }
 
 bool _splay_tree_insert(void **tree,

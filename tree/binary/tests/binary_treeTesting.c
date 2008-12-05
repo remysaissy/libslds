@@ -555,7 +555,7 @@ void Testbinary_tree_graft(CuTest *tc)
       {
         pret = btree_remove(root1, i, btree, BTREE_COMPARE, BTREE_COMPARE_KEY);
         CuAssertPtrNotNull(tc, pret);
-        pret = btree_remove(root2, j, btree, BTREE_COMPARE, BTREE_COMPARE_KEY);
+        pret = btree_remove(root1, j, btree, BTREE_COMPARE, BTREE_COMPARE_KEY);
         CuAssertPtrNotNull(tc, pret);
       }
   }
