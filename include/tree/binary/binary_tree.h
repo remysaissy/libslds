@@ -31,6 +31,8 @@
  * set and unset at will.
  */
 
+#include <tree/binary/common.h>
+
 /* Data type. */
 
 /**

@@ -19,30 +19,7 @@
 
 
 #include    <tree.h>
-
-/* Helpers. */
-
-static  void    *__single_rotate_with_left(void *node,
-                                            unsigned int m)
-{
-  void  *tmp;
-
-  tmp = GET_FIELD(node, m, splay_tree_t)->_btree_base.left;
-  GET_FIELD(node, m, splay_tree_t)->_btree_base.left = GET_FIELD(tmp, m, splay_tree_t)->_btree_base.right;
-  GET_FIELD(tmp, m, splay_tree_t)->_btree_base.right = node;
-  return (tmp);
-}
-
-static  void    *__single_rotate_with_right(void *node,
-                                            unsigned int m)
-{
-  void  *tmp;
-
-  tmp = GET_FIELD(node, m, splay_tree_t)->_btree_base.right;
-  GET_FIELD(node, m, splay_tree_t)->_btree_base.right = GET_FIELD(tmp, m, splay_tree_t)->_btree_base.left;
-  GET_FIELD(tmp, m, splay_tree_t)->_btree_base.left = node;
-  return (tmp);
-}
+#include    "include/avl_rotation.h"
 
 static void *__splay(void **tree,
                       void *key,
@@ -70,16 +47,16 @@ static void *__splay(void **tree,
     {
       diff2 = compare_key_func(GET_FIELD(*tree, m, splay_tree_t)->_btree_base.left, key);
       if (diff2 == BTREE_MATCH)
-        *tree = __single_rotate_with_left(*tree, m);
+        *tree = avl_single_rotate_with_left(*tree, m);
       if (diff2 == BTREE_LEFT)
       {
-        *tree = __single_rotate_with_left(*tree, m);
-        *tree = __single_rotate_with_left(*tree, m);
+        *tree = avl_single_rotate_with_left(*tree, m);
+        *tree = avl_single_rotate_with_left(*tree, m);
       }
       if (diff2 == BTREE_RIGHT)
       {
         tmp = GET_FIELD(*tree, m, splay_tree_t)->_btree_base.left;
-        tmp = __single_rotate_with_right(tmp, m);
+        tmp = avl_single_rotate_with_right(tmp, m);
         GET_FIELD(*tree, m, splay_tree_t)->_btree_base.left = tmp;
       }
     }
@@ -87,16 +64,16 @@ static void *__splay(void **tree,
     {
       diff2 = compare_key_func(GET_FIELD(*tree, m, splay_tree_t)->_btree_base.right, key);
       if (diff2 == BTREE_MATCH)
-        *tree = __single_rotate_with_right(*tree, m);
+        *tree = avl_single_rotate_with_right(*tree, m);
       if (diff2 == BTREE_RIGHT)
       {
-        *tree = __single_rotate_with_right(*tree, m);
-        *tree = __single_rotate_with_right(*tree, m);
+        *tree = avl_single_rotate_with_right(*tree, m);
+        *tree = avl_single_rotate_with_right(*tree, m);
       }
       if (diff2 == BTREE_LEFT)
       {
         tmp = GET_FIELD(*tree, m, splay_tree_t)->_btree_base.right;
-        tmp = __single_rotate_with_left(tmp, m);
+        tmp = avl_single_rotate_with_left(tmp, m);
         GET_FIELD(*tree, m, splay_tree_t)->_btree_base.right = tmp;
       }
     }
