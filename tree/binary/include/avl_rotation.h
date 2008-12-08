@@ -19,5 +19,12 @@ void    *avl_single_rotate_with_right(void *node,
                                      unsigned int m);
 
 
+void    *avl_parent_rotate_with_left(void *node,
+                                     unsigned int m);
+
+void    *avl_parent_rotate_with_right(void *node,
+                                     unsigned int m);
+
+
 
 #endif /* AVL_ROTATION_H_ */

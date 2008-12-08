@@ -80,6 +80,19 @@ typedef struct	btree_s
 
 }		         btree_t;
 
+/**
+ * The extended binary tree data structure.
+ * It is used in trees which involves a parent node such as redblack trees.
+ */
+typedef struct  ebtree_s
+{
+  void          *left;
+  void          *right;
+  void          *parent;
+
+}               ebtree_t;
+
+
 /* Implementation. */
 
 /**

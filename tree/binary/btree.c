@@ -75,7 +75,8 @@ bool _btree_insert(void **tree,
         it = GET_FIELD(it, m, btree_t)->right;
         break;
         case BTREE_MATCH:
-        return (false);
+        default:
+          return (false);
       }
     }
   }
