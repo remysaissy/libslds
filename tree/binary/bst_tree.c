@@ -20,22 +20,22 @@
 #include    <tree.h>
 
 
-bool _btree_init(void *tree,
+bool _bst_tree_init(void *tree,
     unsigned int m)
 {
   if (tree)
   {
-    GET_FIELD(tree, m, btree_t)->left = NULL;
-    GET_FIELD(tree, m, btree_t)->right = NULL;
+    GET_FIELD(tree, m, bst_tree_t)->left = NULL;
+    GET_FIELD(tree, m, bst_tree_t)->right = NULL;
     return (true);
   }
   return (false);
 }
 
-bool _btree_insert(void **tree,
+bool _bst_tree_insert(void **tree,
     void *new,
     unsigned int m,
-    btree_compare_p compare_func)
+    bst_tree_compare_p compare_func)
 {
   void *it;
   int ret;
@@ -44,8 +44,8 @@ bool _btree_insert(void **tree,
       || new == NULL
       || compare_func == NULL)
   return (false);
-  GET_FIELD(new, m, btree_t)->left = NULL;
-  GET_FIELD(new, m, btree_t)->right = NULL;
+  GET_FIELD(new, m, bst_tree_t)->left = NULL;
+  GET_FIELD(new, m, bst_tree_t)->right = NULL;
   if (*tree == NULL)
   *tree = new;
   else
@@ -56,25 +56,25 @@ bool _btree_insert(void **tree,
       ret = compare_func(it, new);
       switch (ret)
       {
-        case BTREE_LEFT:
-        if (GET_FIELD(it, m, btree_t)->left == NULL)
+        case BST_TREE_LEFT:
+        if (GET_FIELD(it, m, bst_tree_t)->left == NULL)
         {
-          GET_FIELD(it, m, btree_t)->left = new;
+          GET_FIELD(it, m, bst_tree_t)->left = new;
           return (true);
         }
         else
-        it = GET_FIELD(it, m, btree_t)->left;
+        it = GET_FIELD(it, m, bst_tree_t)->left;
         break;
-        case BTREE_RIGHT:
-        if (GET_FIELD(it, m, btree_t)->right == NULL)
+        case BST_TREE_RIGHT:
+        if (GET_FIELD(it, m, bst_tree_t)->right == NULL)
         {
-          GET_FIELD(it, m, btree_t)->right = new;
+          GET_FIELD(it, m, bst_tree_t)->right = new;
           return (true);
         }
         else
-        it = GET_FIELD(it, m, btree_t)->right;
+        it = GET_FIELD(it, m, bst_tree_t)->right;
         break;
-        case BTREE_MATCH:
+        case BST_TREE_MATCH:
         default:
           return (false);
       }
@@ -83,11 +83,11 @@ bool _btree_insert(void **tree,
   return (true);
 }
 
-void *_btree_remove(void **tree,
+void *_bst_tree_remove(void **tree,
                     void *key,
                     unsigned int m,
-                    btree_compare_p compare_func,
-                    btree_compare_key_p compare_key_func)
+                    bst_tree_compare_p compare_func,
+                    bst_tree_compare_key_p compare_key_func)
 {
   void *left_prev;
   void *right_prev;
@@ -106,77 +106,76 @@ void *_btree_remove(void **tree,
   right_prev = NULL;
   while (it)
   {
-    ret = compare_key_func(it,
-                           key);
+    ret = compare_key_func(it, key);
     switch (ret)
     {
-      case BTREE_LEFT:
+      case BST_TREE_LEFT:
         left_prev = it;
         right_prev = NULL;
-        it = GET_FIELD(it, m, btree_t)->left;
+        it = GET_FIELD(it, m, bst_tree_t)->left;
         break;
-      case BTREE_RIGHT:
+      case BST_TREE_RIGHT:
         left_prev = NULL;
         right_prev = it;
-        it = GET_FIELD(it, m, btree_t)->right;
+        it = GET_FIELD(it, m, bst_tree_t)->right;
         break;
-      case BTREE_MATCH:
+      case BST_TREE_MATCH:
           node = NULL;
         if (left_prev == NULL
             && right_prev == NULL
-            && GET_FIELD(it, m, btree_t)->left == NULL
-            && GET_FIELD(it, m, btree_t)->right == NULL)
+            && GET_FIELD(it, m, bst_tree_t)->left == NULL
+            && GET_FIELD(it, m, bst_tree_t)->right == NULL)
           *tree = NULL;
         else
         {
-          if (GET_FIELD(it, m, btree_t)->left != NULL)
+          if (GET_FIELD(it, m, bst_tree_t)->left != NULL)
           {
-            /* Get the node depthest node on the right of the left child. */
+            /* Get the deepest node on the right of the left child. */
 
             parent = it;
-            node = GET_FIELD(it, m, btree_t)->left;
-            while (GET_FIELD(node, m, btree_t)->right != NULL)
+            node = GET_FIELD(it, m, bst_tree_t)->left;
+            while (GET_FIELD(node, m, bst_tree_t)->right != NULL)
             {
               parent = node;
-              node = GET_FIELD(node, m, btree_t)->right;
+              node = GET_FIELD(node, m, bst_tree_t)->right;
             }
             if (parent != it)
             {
-              GET_FIELD(parent, m, btree_t)->right = GET_FIELD(node, m, btree_t)->left;
-              GET_FIELD(node, m, btree_t)->left = GET_FIELD(it, m, btree_t)->left;
+              GET_FIELD(parent, m, bst_tree_t)->right = GET_FIELD(node, m, bst_tree_t)->left;
+              GET_FIELD(node, m, bst_tree_t)->left = GET_FIELD(it, m, bst_tree_t)->left;
             }
-            GET_FIELD(node, m, btree_t)->right = GET_FIELD(it, m, btree_t)->right;
+            GET_FIELD(node, m, bst_tree_t)->right = GET_FIELD(it, m, bst_tree_t)->right;
           }
           else
           {
-            if (GET_FIELD(it, m, btree_t)->right != NULL)
+            if (GET_FIELD(it, m, bst_tree_t)->right != NULL)
             {
-              /* Get the node depthest node on the left of the right child. */
+              /* Get the deepest node on the left of the right child. */
 
               parent = it;
-              node = GET_FIELD(it, m, btree_t)->right;
-              while (GET_FIELD(node, m, btree_t)->left != NULL)
+              node = GET_FIELD(it, m, bst_tree_t)->right;
+              while (GET_FIELD(node, m, bst_tree_t)->left != NULL)
               {
                 parent = node;
-                node = GET_FIELD(node, m, btree_t)->left;
+                node = GET_FIELD(node, m, bst_tree_t)->left;
               }
               if (parent != it)
               {
-                GET_FIELD(parent, m, btree_t)->left = GET_FIELD(node, m, btree_t)->right;
-                GET_FIELD(node, m, btree_t)->right = GET_FIELD(it, m, btree_t)->right;
+                GET_FIELD(parent, m, bst_tree_t)->left = GET_FIELD(node, m, bst_tree_t)->right;
+                GET_FIELD(node, m, bst_tree_t)->right = GET_FIELD(it, m, bst_tree_t)->right;
               }
-              GET_FIELD(node, m, btree_t)->left = GET_FIELD(it, m, btree_t)->left;
+              GET_FIELD(node, m, bst_tree_t)->left = GET_FIELD(it, m, bst_tree_t)->left;
             }
           }
           if (left_prev != NULL)
           {
-              GET_FIELD(left_prev, m, btree_t)->left = node;
+              GET_FIELD(left_prev, m, bst_tree_t)->left = node;
           }
           else
           {
             if (right_prev != NULL)
             {
-              GET_FIELD(right_prev, m, btree_t)->right = node;
+              GET_FIELD(right_prev, m, bst_tree_t)->right = node;
             }
             else
               *tree = node;
@@ -188,10 +187,10 @@ void *_btree_remove(void **tree,
   return (NULL);
 }
 
-bool _btree_graft(void **tree,
+bool _bst_tree_graft(void **tree,
     void *subtree,
     unsigned int m,
-    btree_compare_p compare_func)
+    bst_tree_compare_p compare_func)
 {
   void *it;
   int ret;
@@ -212,36 +211,36 @@ bool _btree_graft(void **tree,
     ret = compare_func(it, subtree);
     switch (ret)
     {
-      case BTREE_LEFT:
+      case BST_TREE_LEFT:
       left_prev = it;
       right_prev = NULL;
-      it = GET_FIELD(it, m, btree_t)->left;
+      it = GET_FIELD(it, m, bst_tree_t)->left;
       break;
-      case BTREE_RIGHT:
+      case BST_TREE_RIGHT:
       left_prev = NULL;
       right_prev = it;
-      it = GET_FIELD(it, m, btree_t)->right;
+      it = GET_FIELD(it, m, bst_tree_t)->right;
       break;
-      case BTREE_MATCH:
+      case BST_TREE_MATCH:
       return (false);
     }
   }
   if (left_prev != NULL)
-  GET_FIELD(left_prev, m, btree_t)->left = subtree;
+  GET_FIELD(left_prev, m, bst_tree_t)->left = subtree;
   else
   {
     if (right_prev != NULL)
-    GET_FIELD(right_prev, m, btree_t)->right = subtree;
+    GET_FIELD(right_prev, m, bst_tree_t)->right = subtree;
     else
     *tree = subtree;
   }
   return (true);
 }
 
-void *_btree_prune(void **tree,
+void *_bst_tree_prune(void **tree,
                    void *key,
                    unsigned int m,
-                   btree_compare_key_p compare_key_func)
+                   bst_tree_compare_key_p compare_key_func)
 {
   void *it;
   void *left_prev;
@@ -258,23 +257,23 @@ void *_btree_prune(void **tree,
     ret = compare_key_func(it, key);
     switch (ret)
     {
-      case BTREE_LEFT:
+      case BST_TREE_LEFT:
         left_prev = it;
         right_prev = NULL;
-        it = GET_FIELD(it, m, btree_t)->left;
+        it = GET_FIELD(it, m, bst_tree_t)->left;
         break;
-      case BTREE_RIGHT:
+      case BST_TREE_RIGHT:
         left_prev = NULL;
         right_prev = it;
-        it = GET_FIELD(it, m, btree_t)->right;
+        it = GET_FIELD(it, m, bst_tree_t)->right;
         break;
-      case BTREE_MATCH:
+      case BST_TREE_MATCH:
         if (left_prev != NULL)
-          GET_FIELD(left_prev, m, btree_t)->left = NULL;
+          GET_FIELD(left_prev, m, bst_tree_t)->left = NULL;
         else
         {
           if (right_prev != NULL)
-            GET_FIELD(right_prev, m, btree_t)->right = NULL;
+            GET_FIELD(right_prev, m, bst_tree_t)->right = NULL;
           else
             *tree = NULL;
         }
@@ -284,9 +283,9 @@ void *_btree_prune(void **tree,
   return (NULL);
 }
 
-void    _btree_walk_preorder(void **tree,
+void    _bst_tree_walk_preorder(void **tree,
                             unsigned int m,
-                            btree_walk_p walk_func,
+                            bst_tree_walk_p walk_func,
                             void *data)
 {
     if (tree == NULL
@@ -294,48 +293,48 @@ void    _btree_walk_preorder(void **tree,
         || walk_func == NULL)
         return;
     walk_func(*tree, data);
-    if (GET_FIELD(*tree, m, btree_t)->left != NULL)
-        _btree_walk_preorder(&GET_FIELD(*tree, m, btree_t)->left, m, walk_func, data);
-    if (GET_FIELD(*tree, m, btree_t)->right != NULL)
-        _btree_walk_preorder(&GET_FIELD(*tree, m, btree_t)->right, m, walk_func, data);
+    if (GET_FIELD(*tree, m, bst_tree_t)->left != NULL)
+        _bst_tree_walk_preorder(&GET_FIELD(*tree, m, bst_tree_t)->left, m, walk_func, data);
+    if (GET_FIELD(*tree, m, bst_tree_t)->right != NULL)
+        _bst_tree_walk_preorder(&GET_FIELD(*tree, m, bst_tree_t)->right, m, walk_func, data);
 }
 
-void    _btree_walk_inorder(void **tree,
+void    _bst_tree_walk_inorder(void **tree,
                             unsigned int m,
-                            btree_walk_p walk_func,
+                            bst_tree_walk_p walk_func,
                             void *data)
 {
     if (tree == NULL
         || *tree == NULL
         || walk_func == NULL)
         return;
-    if (GET_FIELD(*tree, m, btree_t)->left != NULL)
-        _btree_walk_inorder(&GET_FIELD(*tree, m, btree_t)->left, m, walk_func, data);
+    if (GET_FIELD(*tree, m, bst_tree_t)->left != NULL)
+        _bst_tree_walk_inorder(&GET_FIELD(*tree, m, bst_tree_t)->left, m, walk_func, data);
     walk_func(*tree, data);
-    if (GET_FIELD(*tree, m, btree_t)->right != NULL)
-        _btree_walk_inorder(&GET_FIELD(*tree, m, btree_t)->right, m, walk_func, data);
+    if (GET_FIELD(*tree, m, bst_tree_t)->right != NULL)
+        _bst_tree_walk_inorder(&GET_FIELD(*tree, m, bst_tree_t)->right, m, walk_func, data);
 }
 
-void    _btree_walk_postorder(void **tree,
+void    _bst_tree_walk_postorder(void **tree,
                             unsigned int m,
-                            btree_walk_p walk_func,
+                            bst_tree_walk_p walk_func,
                             void *data)
 {
     if (tree == NULL
         || *tree == NULL
         || walk_func == NULL)
         return;
-    if (GET_FIELD(*tree, m, btree_t)->left != NULL)
-        _btree_walk_postorder(&GET_FIELD(*tree, m, btree_t)->left, m, walk_func, data);
-    if (GET_FIELD(*tree, m, btree_t)->right != NULL)
-        _btree_walk_postorder(&GET_FIELD(*tree, m, btree_t)->right, m, walk_func, data);
+    if (GET_FIELD(*tree, m, bst_tree_t)->left != NULL)
+        _bst_tree_walk_postorder(&GET_FIELD(*tree, m, bst_tree_t)->left, m, walk_func, data);
+    if (GET_FIELD(*tree, m, bst_tree_t)->right != NULL)
+        _bst_tree_walk_postorder(&GET_FIELD(*tree, m, bst_tree_t)->right, m, walk_func, data);
     walk_func(*tree, data);
 }
 
-void *_btree_lookup(void **tree,
+void *_bst_tree_lookup(void **tree,
                     void *key,
                     unsigned int m,
-                    btree_compare_key_p compare_key_func)
+                    bst_tree_compare_key_p compare_key_func)
 {
   void *it;
   int ret;
@@ -349,13 +348,13 @@ void *_btree_lookup(void **tree,
                            key);
     switch (ret)
     {
-      case BTREE_LEFT:
-        it = GET_FIELD(it, m, btree_t)->left;
+      case BST_TREE_LEFT:
+        it = GET_FIELD(it, m, bst_tree_t)->left;
         break;
-      case BTREE_RIGHT:
-        it = GET_FIELD(it, m, btree_t)->right;
+      case BST_TREE_RIGHT:
+        it = GET_FIELD(it, m, bst_tree_t)->right;
         break;
-      case BTREE_MATCH:
+      case BST_TREE_MATCH:
         return (it);
     }
   }

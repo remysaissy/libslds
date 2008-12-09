@@ -28,7 +28,8 @@
 
 #include	"common.h"
 
-#include	"tree/binary/btree.h"
+#include	"tree/binary/bst_tree.h"
+#include    "tree/binary/ebst_tree.h"
 #include	"tree/binary/splay_tree.h"
 #include    "tree/binary/redblack_tree.h"
 

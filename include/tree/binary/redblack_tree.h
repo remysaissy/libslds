@@ -32,14 +32,14 @@
 /*
  * Data structure.
  */
-typedef struct  redblack_tree_s
+typedef struct          redblack_tree_s
 {
-  void          *left;
-  void          *right;
-  void          *parent; /** The parent is put after left and right for btree compatible functions. */
-  bool          is_red; /** If not red, it is black. */
+  void                  *left;
+  void                  *right;
+  void                  *parent; /** The parent is put after left and right for btree compatible functions. */
+  enum { black, red }   colour; /** The colour of the node. */
 
-}               redblack_tree_t;
+}                       redblack_tree_t;
 
 
 /**
@@ -61,7 +61,7 @@ typedef struct  redblack_tree_s
  * @return The node looked up on success, NULL on error.
  */
 #define redblack_tree_lookup(tree, key, m, compare_key_func)            \
-    _btree_lookup((void **)&(tree),                       \
+    _bst_tree_lookup((void **)&(tree),                       \
         (void *)(key),                      \
              (unsigned int)offsetof(typeof(*(tree)), m),    \
              compare_key_func)
@@ -134,7 +134,7 @@ typedef struct  redblack_tree_s
  * @param data arbitrary data for callbacks.
  */
 #define redblack_tree_walk_preorder(tree, m, walk_func, data)                       \
-        _btree_walk_preorder((void **)&(tree),                                \
+        _bst_tree_walk_preorder((void **)&(tree),                                \
                             (unsigned int)offsetof(typeof(*(tree)), m), \
                             walk_func,                                      \
                             (void *)(data))
@@ -147,7 +147,7 @@ typedef struct  redblack_tree_s
  * @param data arbitrary data for callbacks.
  */
 #define redblack_tree_walk_inorder(tree, m, walk_func, data)                        \
-        _btree_walk_inorder((void **)&(tree),                             \
+        _bst_tree_walk_inorder((void **)&(tree),                             \
                             (unsigned int)offsetof(typeof(*(tree)), m), \
                             walk_func,                                      \
                             (void *)(data))
@@ -160,7 +160,7 @@ typedef struct  redblack_tree_s
  * @param data arbitrary data for callbacks.
  */
 #define redblack_tree_walk_postorder(tree, m, walk_func, data)                      \
-        _btree_walk_postorder((void **)&(tree),                       \
+        _bst_tree_walk_postorder((void **)&(tree),                       \
                             (unsigned int)offsetof(typeof(*(tree)), m), \
                             walk_func,                                      \
                             (void *)(data))
@@ -188,7 +188,7 @@ bool    _redblack_tree_init(void *tree,
 bool    _redblack_tree_insert(void **tree,
               void *new,
               unsigned int m,
-              btree_compare_p compare_func);
+              bst_tree_compare_p compare_func);
 
 /**
  * Remove a redblack tree node.
@@ -202,8 +202,8 @@ bool    _redblack_tree_insert(void **tree,
 void    *_redblack_tree_remove(void **tree,
               void *key,
               unsigned int m,
-              btree_compare_p compare_func,
-              btree_compare_key_p compare_key_func);
+              bst_tree_compare_p compare_func,
+              bst_tree_compare_key_p compare_key_func);
 
 /**
  * Graft a subtree in a redblack tree.
@@ -218,7 +218,7 @@ void    *_redblack_tree_remove(void **tree,
 bool    _redblack_tree_graft(void **tree,
              void *subtree,
              unsigned int m,
-             btree_compare_p compare_func);
+             bst_tree_compare_p compare_func);
 
 /**
  * Prune a redblack tree.
@@ -231,7 +231,7 @@ bool    _redblack_tree_graft(void **tree,
 void    *_redblack_tree_prune(void **tree,
              void *key,
              unsigned int m,
-             btree_compare_key_p compare_key_func);
+             bst_tree_compare_key_p compare_key_func);
 
 
 #endif /* __LIBSLDS_BINARY_REDBLACK_TREE_H__ */

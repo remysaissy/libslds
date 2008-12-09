@@ -24,7 +24,7 @@
 static void *__splay(void **tree,
                       void *key,
                       unsigned int m,
-                      btree_compare_key_p compare_key_func)
+                      bst_tree_compare_key_p compare_key_func)
 {
   int   diff;
   int   diff2;
@@ -41,19 +41,19 @@ static void *__splay(void **tree,
    *
    */
 
-  while (*tree != NULL && (diff = compare_key_func(*tree, key)) != BTREE_MATCH)
+  while (*tree != NULL && (diff = compare_key_func(*tree, key)) != BST_TREE_MATCH)
   {
-    if (diff == BTREE_LEFT)
+    if (diff == BST_TREE_LEFT)
     {
       diff2 = compare_key_func(GET_FIELD(*tree, m, splay_tree_t)->left, key);
-      if (diff2 == BTREE_MATCH)
+      if (diff2 == BST_TREE_MATCH)
         *tree = avl_single_rotate_with_left(*tree, m);
-      if (diff2 == BTREE_LEFT)
+      if (diff2 == BST_TREE_LEFT)
       {
         *tree = avl_single_rotate_with_left(*tree, m);
         *tree = avl_single_rotate_with_left(*tree, m);
       }
-      if (diff2 == BTREE_RIGHT)
+      if (diff2 == BST_TREE_RIGHT)
       {
         tmp = GET_FIELD(*tree, m, splay_tree_t)->left;
         tmp = avl_single_rotate_with_right(tmp, m);
@@ -63,14 +63,14 @@ static void *__splay(void **tree,
     else
     {
       diff2 = compare_key_func(GET_FIELD(*tree, m, splay_tree_t)->right, key);
-      if (diff2 == BTREE_MATCH)
+      if (diff2 == BST_TREE_MATCH)
         *tree = avl_single_rotate_with_right(*tree, m);
-      if (diff2 == BTREE_RIGHT)
+      if (diff2 == BST_TREE_RIGHT)
       {
         *tree = avl_single_rotate_with_right(*tree, m);
         *tree = avl_single_rotate_with_right(*tree, m);
       }
-      if (diff2 == BTREE_LEFT)
+      if (diff2 == BST_TREE_LEFT)
       {
         tmp = GET_FIELD(*tree, m, splay_tree_t)->right;
         tmp = avl_single_rotate_with_left(tmp, m);
@@ -86,11 +86,11 @@ static void *__splay(void **tree,
 void *_splay_tree_lookup(void **tree,
                     void *key,
                     unsigned int m,
-                    btree_compare_key_p compare_key_func)
+                    bst_tree_compare_key_p compare_key_func)
 {
   void *node;
 
-  node = _btree_lookup(tree, key, m, compare_key_func);
+  node = _bst_tree_lookup(tree, key, m, compare_key_func);
   if (node != NULL)
     node = __splay(tree, key, m, compare_key_func);
   return (node);

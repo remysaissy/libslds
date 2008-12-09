@@ -39,13 +39,13 @@
  * to go to the left or to the right child. the comparison
  * also match and, in that case, match is returned.
  */
-typedef enum    _btree_compare_e
+typedef enum    _bst_tree_compare_e
 {
-    BTREE_LEFT = -1,
-    BTREE_MATCH,
-    BTREE_RIGHT
+    BST_TREE_LEFT = -1,
+    BST_TREE_MATCH,
+    BST_TREE_RIGHT
 
-}               btree_compare_e;
+}               bst_tree_compare_e;
 
 /**
  * Comparison callback. This callback is used to compare two nodes.
@@ -53,7 +53,7 @@ typedef enum    _btree_compare_e
  * @param node The node used for comparison.
  * @return Where the caller must go next: left or right child or match if the comparison matched.
  */
-typedef btree_compare_e (*btree_compare_p)(void *tree_node, void *node);
+typedef bst_tree_compare_e (*bst_tree_compare_p)(void *tree_node, void *node);
 
 /**
  * Comparison callback. This callback is used to compare a node and a key.
@@ -61,37 +61,24 @@ typedef btree_compare_e (*btree_compare_p)(void *tree_node, void *node);
  * @param key The key to compare with tree_node.
  * @return Where the caller must go next: left or right child or match if the comparison matched.
  */
-typedef btree_compare_e (*btree_compare_key_p)(void *tree_node, void *key);
+typedef bst_tree_compare_e (*bst_tree_compare_key_p)(void *tree_node, void *key);
 
 /**
  * Walk along the tree callback. It is used like an iterator.
  * @param node The node of the tree.
  * @param data variable and optional parameter that can be used by the callback content. Typically used to locate the comparison state.
  */
-typedef void            (*btree_walk_p)(void *node, void *data);
+typedef void            (*bst_tree_walk_p)(void *node, void *data);
 
 /**
  * The data structure which represents a binary tree.
  */
-typedef struct	btree_s
+typedef struct	bst_tree_s
 {
   void          *left;
   void          *right;
 
-}		         btree_t;
-
-/**
- * The extended binary tree data structure.
- * It is used in trees which involves a parent node such as redblack trees.
- */
-typedef struct  ebtree_s
-{
-  void          *left;
-  void          *right;
-  void          *parent;
-
-}               ebtree_t;
-
+}		         bst_tree_t;
 
 /* Implementation. */
 
@@ -101,8 +88,8 @@ typedef struct  ebtree_s
  * @param m The name of the binary tree data structure in tree.
  * @return true on success, false on error.
  */
-#define	btree_init(tree, m)						\
-	_btree_init((void *)(tree),						\
+#define	bst_tree_init(tree, m)						\
+	_bst_tree_init((void *)(tree),						\
 		   (unsigned int)offsetof(typeof(*(tree)), m))
 
 /**
@@ -113,8 +100,8 @@ typedef struct  ebtree_s
  * @param compare_key_func callback for comparison.
  * @return The node looked up on success, NULL on error.
  */
-#define	btree_lookup(tree, key, m, compare_key_func)			\
-	_btree_lookup((void **)&(tree),						\
+#define	bst_tree_lookup(tree, key, m, compare_key_func)			\
+	_bst_tree_lookup((void **)&(tree),						\
 	    (void *)(key),						\
 		     (unsigned int)offsetof(typeof(*(tree)), m),	\
 		     compare_key_func)
@@ -127,8 +114,8 @@ typedef struct  ebtree_s
  * @param compare_func callback for comparison.
  * @return true on success, false on error.
  */
-#define	btree_insert(tree, new, m, compare_func)			\
-	_btree_insert((void **)&(tree),						\
+#define	bst_tree_insert(tree, new, m, compare_func)			\
+	_bst_tree_insert((void **)&(tree),						\
               (void *)(new),						\
 		     (unsigned int)offsetof(typeof(*(tree)), m),	\
 		     compare_func)
@@ -142,8 +129,8 @@ typedef struct  ebtree_s
  * @param compare_key_func callback for comparison.
  * @return The node removed on success, NULL on error.
  */
-#define	btree_remove(tree, key, m, compare_func, compare_key_func)	\
-     _btree_remove((void **)&(tree),						\
+#define	bst_tree_remove(tree, key, m, compare_func, compare_key_func)	\
+     _bst_tree_remove((void **)&(tree),						\
          (void *)(key),						\
 		  (unsigned int)offsetof(typeof(*(tree)), m),		\
 		  compare_func,						\
@@ -159,8 +146,8 @@ typedef struct  ebtree_s
  * @note A subtree that has nodes which are also in tree can be grafted.
  * this preliminary control is left to the caller.
  */
-#define	btree_graft(tree, subtree, m, compare_func)			\
-	_btree_graft((void **)&(tree),						\
+#define	bst_tree_graft(tree, subtree, m, compare_func)			\
+	_bst_tree_graft((void **)&(tree),						\
 	    (void *)(subtree),						\
 		     (unsigned int)offsetof(typeof(*(tree)), m),	\
 		     compare_func)
@@ -173,8 +160,8 @@ typedef struct  ebtree_s
  * @param compare_key_func callback for comparison.
  * @return The subtree on success, NULL on error.
  */
-#define	btree_prune(tree, key, m, compare_key_func)			\
-	_btree_prune((void **)&(tree),						\
+#define	bst_tree_prune(tree, key, m, compare_key_func)			\
+	_bst_tree_prune((void **)&(tree),						\
 	    (void *)(key),						\
 		     (unsigned int)offsetof(typeof(*(tree)), m),	\
 		     compare_key_func)
@@ -186,8 +173,8 @@ typedef struct  ebtree_s
  * @param walk_func Callback used like an iterator. Called for every nodes.
  * @param data arbitrary data for callbacks.
  */
-#define	btree_walk_preorder(tree, m, walk_func, data)						\
-		_btree_walk_preorder((void **)&(tree),								\
+#define	bst_tree_walk_preorder(tree, m, walk_func, data)						\
+		_bst_tree_walk_preorder((void **)&(tree),								\
 							(unsigned int)offsetof(typeof(*(tree)), m),	\
 							walk_func,										\
 							(void *)(data))
@@ -199,8 +186,8 @@ typedef struct  ebtree_s
  * @param walk_func Callback used like an iterator. Called for every nodes.
  * @param data arbitrary data for callbacks.
  */
-#define	btree_walk_inorder(tree, m, walk_func, data)						\
-		_btree_walk_inorder((void **)&(tree),								\
+#define	bst_tree_walk_inorder(tree, m, walk_func, data)						\
+		_bst_tree_walk_inorder((void **)&(tree),								\
 							(unsigned int)offsetof(typeof(*(tree)), m),	\
 							walk_func,										\
 							(void *)(data))
@@ -212,8 +199,8 @@ typedef struct  ebtree_s
  * @param walk_func Callback used like an iterator. Called for every nodes.
  * @param data arbitrary data for callbacks.
  */
-#define	btree_walk_postorder(tree, m, walk_func, data)						\
-		_btree_walk_postorder((void **)&(tree),						\
+#define	bst_tree_walk_postorder(tree, m, walk_func, data)						\
+		_bst_tree_walk_postorder((void **)&(tree),						\
 							(unsigned int)offsetof(typeof(*(tree)), m),	\
 							walk_func,										\
 							(void *)(data))
@@ -227,7 +214,7 @@ typedef struct  ebtree_s
  * @param m The offset of the binary tree data structure in tree.
  * @return true on success, false on error.
  */
-bool    _btree_init(void *tree,
+bool    _bst_tree_init(void *tree,
             unsigned int m);
 /**
  * Insert a binary tree node.
@@ -237,10 +224,10 @@ bool    _btree_init(void *tree,
  * @param compare_func callback for comparison.
  * @return true on success, false on error.
  */
-bool    _btree_insert(void **tree,
+bool    _bst_tree_insert(void **tree,
               void *new,
               unsigned int m,
-              btree_compare_p compare_func);
+              bst_tree_compare_p compare_func);
 
 /**
  * Remove a binary tree node.
@@ -251,11 +238,11 @@ bool    _btree_insert(void **tree,
  * @param compare_key_func callback for comparison.
  * @return The node removed on success, NULL on error.
  */
-void    *_btree_remove(void **tree,
+void    *_bst_tree_remove(void **tree,
               void *key,
               unsigned int m,
-              btree_compare_p compare_func,
-              btree_compare_key_p compare_key_func);
+              bst_tree_compare_p compare_func,
+              bst_tree_compare_key_p compare_key_func);
 
 /**
  * Graft a subtree in a binary tree.
@@ -267,10 +254,10 @@ void    *_btree_remove(void **tree,
  * @note A subtree that has nodes which are also in tree can be grafted.
  * this preliminary control is left to the caller.
  */
-bool    _btree_graft(void **tree,
+bool    _bst_tree_graft(void **tree,
              void *subtree,
              unsigned int m,
-             btree_compare_p compare_func);
+             bst_tree_compare_p compare_func);
 
 /**
  * Prune a binary tree.
@@ -280,10 +267,10 @@ bool    _btree_graft(void **tree,
  * @param compare_key_func callback for comparison.
  * @return The subtree on success, NULL on error.
  */
-void    *_btree_prune(void **tree,
+void    *_bst_tree_prune(void **tree,
              void *key,
              unsigned int m,
-             btree_compare_key_p compare_key_func);
+             bst_tree_compare_key_p compare_key_func);
 
 /**
  * Look for a node in a binary tree.
@@ -293,10 +280,10 @@ void    *_btree_prune(void **tree,
  * @param compare_key_func callback for comparison.
  * @return The node looked up on success, NULL on error.
  */
-void    *_btree_lookup(void **tree,
+void    *_bst_tree_lookup(void **tree,
                void *key,
                unsigned int m,
-               btree_compare_key_p compare_key_func);
+               bst_tree_compare_key_p compare_key_func);
 
 /**
  * Step along the tree in a pre-order fashion.
@@ -305,9 +292,9 @@ void    *_btree_lookup(void **tree,
  * @param walk_func Callback used like an iterator. Called for every nodes.
  * @param data arbitrary data for callbacks.
  */
-void    _btree_walk_preorder(void **tree,
+void    _bst_tree_walk_preorder(void **tree,
                             unsigned int m,
-                            btree_walk_p walk_func,
+                            bst_tree_walk_p walk_func,
                             void *data);
 
 /**
@@ -317,9 +304,9 @@ void    _btree_walk_preorder(void **tree,
  * @param walk_func Callback used like an iterator. Called for every nodes.
  * @param data arbitrary data for callbacks.
  */
-void    _btree_walk_inorder(void **tree,
+void    _bst_tree_walk_inorder(void **tree,
                             unsigned int m,
-                            btree_walk_p walk_func,
+                            bst_tree_walk_p walk_func,
                             void *data);
 
 /**
@@ -329,9 +316,9 @@ void    _btree_walk_inorder(void **tree,
  * @param walk_func Callback used like an iterator. Called for every nodes.
  * @param data arbitrary data for callbacks.
  */
-void    _btree_walk_postorder(void **tree,
+void    _bst_tree_walk_postorder(void **tree,
                             unsigned int m,
-                            btree_walk_p walk_func,
+                            bst_tree_walk_p walk_func,
                             void *data);
 
 #endif /* __LIBSLDS_BINARY_BTREE_H__ */

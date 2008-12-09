@@ -31,7 +31,7 @@
 /*
  * Data structure.
  */
-typedef btree_t splay_tree_t;
+typedef bst_tree_t splay_tree_t;
 
 /**
  * Initialize a splay tree node.
@@ -40,7 +40,7 @@ typedef btree_t splay_tree_t;
  * @return true on success, false on error.
  */
 #define splay_tree_init(tree, m)                     \
-    _btree_init((void *)(tree),                     \
+    _bst_tree_init((void *)(tree),                     \
            (unsigned int)offsetof(typeof(*(tree)), m))
 
 /**
@@ -66,7 +66,7 @@ typedef btree_t splay_tree_t;
  * @return true on success, false on error.
  */
 #define splay_tree_insert(tree, new, m, compare_func)            \
-    _btree_insert((void **)&(tree),                     \
+    _bst_tree_insert((void **)&(tree),                     \
               (void *)(new),                        \
              (unsigned int)offsetof(typeof(*(tree)), m),    \
              compare_func)
@@ -81,7 +81,7 @@ typedef btree_t splay_tree_t;
  * @return The node removed on success, NULL on error.
  */
 #define splay_tree_remove(tree, key, m, compare_func, compare_key_func)  \
-     _btree_remove((void **)&(tree),                        \
+     _bst_tree_remove((void **)&(tree),                        \
          (void *)(key),                     \
           (unsigned int)offsetof(typeof(*(tree)), m),       \
           compare_func,                     \
@@ -98,7 +98,7 @@ typedef btree_t splay_tree_t;
  * this preliminary control is left to the caller.
  */
 #define splay_tree_graft(tree, susplay_tree, m, compare_func)         \
-    _btree_graft((void **)&(tree),                      \
+    _bst_tree_graft((void **)&(tree),                      \
         (void *)(susplay_tree),                      \
              (unsigned int)offsetof(typeof(*(tree)), m),    \
              compare_func)
@@ -112,7 +112,7 @@ typedef btree_t splay_tree_t;
  * @return The susplay_tree on success, NULL on error.
  */
 #define splay_tree_prune(tree, key, m, compare_key_func)         \
-    _btree_prune((void **)&(tree),                      \
+    _bst_tree_prune((void **)&(tree),                      \
         (void *)(key),                      \
              (unsigned int)offsetof(typeof(*(tree)), m),    \
              compare_key_func)
@@ -125,7 +125,7 @@ typedef btree_t splay_tree_t;
  * @param data arbitrary data for callbacks.
  */
 #define splay_tree_walk_preorder(tree, m, walk_func, data)                       \
-        _btree_walk_preorder((void **)&(tree),                                \
+        _bst_tree_walk_preorder((void **)&(tree),                                \
                             (unsigned int)offsetof(typeof(*(tree)), m), \
                             walk_func,                                      \
                             (void *)(data))
@@ -138,7 +138,7 @@ typedef btree_t splay_tree_t;
  * @param data arbitrary data for callbacks.
  */
 #define splay_tree_walk_inorder(tree, m, walk_func, data)                        \
-        _btree_walk_inorder((void **)&(tree),                             \
+        _bst_tree_walk_inorder((void **)&(tree),                             \
                             (unsigned int)offsetof(typeof(*(tree)), m), \
                             walk_func,                                      \
                             (void *)(data))
@@ -151,7 +151,7 @@ typedef btree_t splay_tree_t;
  * @param data arbitrary data for callbacks.
  */
 #define splay_tree_walk_postorder(tree, m, walk_func, data)                      \
-        _btree_walk_postorder((void **)&(tree),                       \
+        _bst_tree_walk_postorder((void **)&(tree),                       \
                             (unsigned int)offsetof(typeof(*(tree)), m), \
                             walk_func,                                      \
                             (void *)(data))
@@ -170,6 +170,6 @@ typedef btree_t splay_tree_t;
 void    *_splay_tree_lookup(void **tree,
                void *key,
                unsigned int m,
-               btree_compare_key_p compare_key_func);
+               bst_tree_compare_key_p compare_key_func);
 
 #endif /* __LIBSLDS_BINARY_SPLAY_TREE_H__ */

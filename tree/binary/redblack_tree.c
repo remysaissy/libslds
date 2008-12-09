@@ -23,233 +23,298 @@
 
 /* Helpers. */
 
-static void *__grandparent(void *node, unsigned int m)
-{
-    if ((node != NULL) && (GET_FIELD(node, m, redblack_tree_t)->parent != NULL))
-        return (GET_FIELD(GET_FIELD(node, m, redblack_tree_t)->parent, m, redblack_tree_t)->parent);
-    else
-        return (NULL);
-}
+//static void *__grandparent(void *node, unsigned int m)
+//{
+//    if ((node != NULL) && (GET_FIELD(node, m, redblack_tree_t)->parent != NULL))
+//        return (GET_FIELD(GET_FIELD(node, m, redblack_tree_t)->parent, m, redblack_tree_t)->parent);
+//    else
+//        return (NULL);
+//}
+//
+//static void *__uncle(void *node, unsigned int m)
+//{
+//    void    *grandpa = __grandparent(node, m);
+//
+//    if (grandpa == NULL)
+//      return (NULL);
+//    if (GET_FIELD(node, m, redblack_tree_t)->parent == GET_FIELD(grandpa, m, redblack_tree_t)->left)
+//        return GET_FIELD(grandpa, m, redblack_tree_t)->right;
+//    else
+//        return GET_FIELD(grandpa, m, redblack_tree_t)->left;
+//}
 
-static void *__uncle(void *node, unsigned int m)
-{
-    void    *grandpa = __grandparent(node, m);
+//static void *__sibling(void *node, unsigned int m)
+//{
+//    if (node == GET_FIELD(GET_FIELD(node, m, redblack_tree_t)->parent, m, redblack_tree_t)->left)
+//        return (GET_FIELD(GET_FIELD(node, m, redblack_tree_t)->parent, m, redblack_tree_t)->right);
+//    else
+//      return (GET_FIELD(GET_FIELD(node, m, redblack_tree_t)->parent, m, redblack_tree_t)->left);
+//}
 
-    if (grandpa == NULL)
-      return (NULL);
-    if (GET_FIELD(node, m, redblack_tree_t)->parent == GET_FIELD(grandpa, m, redblack_tree_t)->left)
-        return GET_FIELD(grandpa, m, redblack_tree_t)->right;
-    else
-        return GET_FIELD(grandpa, m, redblack_tree_t)->left;
-}
-
-static void *__sibling(void *node, unsigned int m)
-{
-    if (node == GET_FIELD(GET_FIELD(node, m, redblack_tree_t)->parent, m, redblack_tree_t)->left)
-        return (GET_FIELD(GET_FIELD(node, m, redblack_tree_t)->parent, m, redblack_tree_t)->right);
-    else
-      return (GET_FIELD(GET_FIELD(node, m, redblack_tree_t)->parent, m, redblack_tree_t)->left);
-}
-
-static void __insert_case5(void *node, unsigned int m)
-{
-  void      *grandpa;
-
-  grandpa = __grandparent(node, m);
-  GET_FIELD(GET_FIELD(node, m, redblack_tree_t)->parent, m, redblack_tree_t)->is_red = false;
-  GET_FIELD(grandpa, m, redblack_tree_t)->is_red = true;
-  if ((node == GET_FIELD(GET_FIELD(node, m, redblack_tree_t)->parent, m, redblack_tree_t)->left)
-      && (GET_FIELD(node, m, redblack_tree_t)->parent == GET_FIELD(grandpa, m, redblack_tree_t)->left))
-  {
-    avl_parent_rotate_with_right(grandpa, m);
-  }
-  else
-  {
-        /*
-         * Here, (n == n->parent->right) && (n->parent == g->right).
-         */
-    avl_parent_rotate_with_left(grandpa, m);
-  }
-}
-
-static void __insert_case4(void *node, unsigned int m)
-{
-  void  *grandpa;
-
-  grandpa = __grandparent(node, m);
-    if ((node == GET_FIELD(GET_FIELD(node, m, redblack_tree_t)->parent, m, redblack_tree_t)->right)
-        && (GET_FIELD(node, m, redblack_tree_t)->parent == GET_FIELD(grandpa, m, redblack_tree_t)->left))
-    {
-        avl_parent_rotate_with_left(GET_FIELD(node, m, redblack_tree_t)->parent, m);
-        node = GET_FIELD(node, m, redblack_tree_t)->left;
-    }
-    else
-      if ((node == GET_FIELD(GET_FIELD(node, m, redblack_tree_t)->parent, m, redblack_tree_t)->left)
-          && (GET_FIELD(node, m, redblack_tree_t)->parent == GET_FIELD(grandpa, m, redblack_tree_t)->right))
-      {
-        avl_parent_rotate_with_right(GET_FIELD(node, m, redblack_tree_t)->parent, m);
-        node = GET_FIELD(node, m, redblack_tree_t)->right;
-      }
-    __insert_case5(node, m);
-}
-
-static void __insert_case1(void *node, unsigned int m);
-
-static void __insert_case3(void *node, unsigned int m)
-{
-    void    *uncle;
-    void    *grandpa;
-
-    uncle = __uncle(node, m);
-    grandpa = NULL;
-    if ((uncle != NULL) && (GET_FIELD(uncle, m, redblack_tree_t)->is_red == true))
-    {
-        GET_FIELD(GET_FIELD(node, m, redblack_tree_t)->parent, m, redblack_tree_t)->is_red = false;
-        GET_FIELD(uncle, m, redblack_tree_t)->is_red = false;
-        grandpa = __grandparent(node, m);
-        GET_FIELD(grandpa, m, redblack_tree_t)->is_red = true;
-        __insert_case1(grandpa, m);
-    }
-    else
-    {
-        __insert_case4(node, m);
-    }
-}
-
-static void __insert_case2(void *node, unsigned int m)
-{
-    if (GET_FIELD(GET_FIELD(node, m, redblack_tree_t)->parent, m, redblack_tree_t)->is_red == false)
-        return; /* Tree is still valid */
-    else
-        __insert_case3(node, m);
-}
-
-static void __insert_case1(void *node, unsigned int m)
-{
-    if (GET_FIELD(node, m, redblack_tree_t)->parent == NULL)
-      GET_FIELD(node, m, redblack_tree_t)->is_red = false;
-    else
-        __insert_case2(node, m);
-}
+//static void __insert_case5(void *node, unsigned int m)
+//{
+//  void      *grandpa;
+//
+//  grandpa = __grandparent(node, m);
+//  GET_FIELD(GET_FIELD(node, m, redblack_tree_t)->parent, m, redblack_tree_t)->colour = black;
+//  GET_FIELD(grandpa, m, redblack_tree_t)->colour = red;
+//  if ((node == GET_FIELD(GET_FIELD(node, m, redblack_tree_t)->parent, m, redblack_tree_t)->left)
+//      && (GET_FIELD(node, m, redblack_tree_t)->parent == GET_FIELD(grandpa, m, redblack_tree_t)->left))
+//  {
+//    avl_parent_rotate_with_right(grandpa, m);
+//  }
+//  else
+//  {
+//        /*
+//         * Here, (n == n->parent->right) && (n->parent == g->right).
+//         */
+//    avl_parent_rotate_with_left(grandpa, m);
+//  }
+//}
+//
+//static void __insert_case4(void *node, unsigned int m)
+//{
+//  void  *grandpa;
+//
+//  grandpa = __grandparent(node, m);
+//    if ((node == GET_FIELD(GET_FIELD(node, m, redblack_tree_t)->parent, m, redblack_tree_t)->right)
+//        && (GET_FIELD(node, m, redblack_tree_t)->parent == GET_FIELD(grandpa, m, redblack_tree_t)->left))
+//    {
+//        avl_parent_rotate_with_left(GET_FIELD(node, m, redblack_tree_t)->parent, m);
+//        node = GET_FIELD(node, m, redblack_tree_t)->left;
+//    }
+//    else
+//      if ((node == GET_FIELD(GET_FIELD(node, m, redblack_tree_t)->parent, m, redblack_tree_t)->left)
+//          && (GET_FIELD(node, m, redblack_tree_t)->parent == GET_FIELD(grandpa, m, redblack_tree_t)->right))
+//      {
+//        avl_parent_rotate_with_right(GET_FIELD(node, m, redblack_tree_t)->parent, m);
+//        node = GET_FIELD(node, m, redblack_tree_t)->right;
+//      }
+//    __insert_case5(node, m);
+//}
+//
+//static void __insert_case1(void *node, unsigned int m);
+//
+//static void __insert_case3(void *node, unsigned int m)
+//{
+//    void    *uncle;
+//    void    *grandpa;
+//
+//    uncle = __uncle(node, m);
+//    grandpa = NULL;
+//    if ((uncle != NULL) && (GET_FIELD(uncle, m, redblack_tree_t)->colour == red))
+//    {
+//        GET_FIELD(GET_FIELD(node, m, redblack_tree_t)->parent, m, redblack_tree_t)->colour = black;
+//        GET_FIELD(uncle, m, redblack_tree_t)->colour = black;
+//        grandpa = __grandparent(node, m);
+//        GET_FIELD(grandpa, m, redblack_tree_t)->colour = red;
+//        __insert_case1(grandpa, m);
+//    }
+//    else
+//    {
+//        __insert_case4(node, m);
+//    }
+//}
+//
+//static void __insert_case2(void *node, unsigned int m)
+//{
+//    if (GET_FIELD(GET_FIELD(node, m, redblack_tree_t)->parent, m, redblack_tree_t)->colour == black)
+//        return; /* Tree is still valid */
+//    else
+//        __insert_case3(node, m);
+//}
+//
+//static void __insert_case1(void *node, unsigned int m)
+//{
+//    if (GET_FIELD(node, m, redblack_tree_t)->parent == NULL)
+//      GET_FIELD(node, m, redblack_tree_t)->colour = black;
+//    else
+//        __insert_case2(node, m);
+//}
 
 static void __make_some_painting(void *node, unsigned int m)
 {
-  __insert_case1(node, m);
+//  void  *y;
+//
+////  __insert_case1(node, m);
+//  GET_FIELD(node, m, redblack_tree_t)->colour = red;
+//    while ((GET_FIELD(node, m, redblack_tree_t)->parent != NULL)
+//        && (GET_FIELD(GET_FIELD(node, m, redblack_tree_t)->parent, m, redblack_tree_t)->colour == red))
+//    {
+//       if (GET_FIELD(node, m, redblack_tree_t)->parent == GET_FIELD(GET_FIELD(GET_FIELD(node, m, redblack_tree_t)->parent, m, redblack_tree_t)->parent, m, redblack_tree_t)->left)
+//       {
+//         /* If x's parent is a left, y is x's right 'uncle' */
+//         y = GET_FIELD(GET_FIELD(GET_FIELD(node, m, redblack_tree_t)->parent, m, redblack_tree_t)->parent, m, redblack_tree_t)->right;
+//         if (GET_FIELD(y, m, redblack_tree_t)->colour == red)
+//         {
+//           /* case 1 - change the colours */
+//           GET_FIELD(GET_FIELD(node, m, redblack_tree_t)->parent, m, redblack_tree_t)->colour = black;
+//           GET_FIELD(y, m, redblack_tree_t)->colour = black;
+//           GET_FIELD(GET_FIELD(GET_FIELD(node, m, redblack_tree_t)->parent, m, redblack_tree_t)->parent, m, redblack_tree_t)->colour = red;
+//           /* Move x up the tree */
+//           node = GET_FIELD(GET_FIELD(node, m, redblack_tree_t)->parent, m, redblack_tree_t)->parent;
+//         }
+//         else
+//         {
+//               /* y is a black node */
+//               if (node == GET_FIELD(GET_FIELD(node, m, redblack_tree_t)->parent, m, redblack_tree_t)->right)
+//               {
+//                   /* and x is to the right */
+//                   /* case 2 - move x up and rotate */
+//                   node = GET_FIELD(node, m, redblack_tree_t)->parent;
+//                   avl_parent_rotate_with_left(node, m);
+//               }
+//               /* case 3 */
+//               GET_FIELD(GET_FIELD(node, m, redblack_tree_t)->parent, m, redblack_tree_t)->colour = black;
+//               GET_FIELD(GET_FIELD(GET_FIELD(node, m, redblack_tree_t)->parent, m, redblack_tree_t)->parent, m, redblack_tree_t)->colour = red;
+//               avl_parent_rotate_with_right(GET_FIELD(GET_FIELD(node, m, redblack_tree_t)->parent, m, redblack_tree_t)->parent, m);
+//         }
+//       }
+//       else
+//       {
+//         /* If x's parent is a right, y is x's left 'uncle' */
+//         y = GET_FIELD(GET_FIELD(GET_FIELD(node, m, redblack_tree_t)->parent, m, redblack_tree_t)->parent, m, redblack_tree_t)->left;
+//         if (GET_FIELD(y, m, redblack_tree_t)->colour == red)
+//         {
+//           /* case 1 - change the colours */
+//           GET_FIELD(GET_FIELD(node, m, redblack_tree_t)->parent, m, redblack_tree_t)->colour = black;
+//           GET_FIELD(y, m, redblack_tree_t)->colour = black;
+//           GET_FIELD(GET_FIELD(GET_FIELD(node, m, redblack_tree_t)->parent, m, redblack_tree_t)->parent, m, redblack_tree_t)->colour = red;
+//           /* Move x up the tree */
+//           node = GET_FIELD(GET_FIELD(node, m, redblack_tree_t)->parent, m, redblack_tree_t)->parent;
+//         }
+//         else
+//         {
+//               /* y is a black node */
+//               if (node == GET_FIELD(GET_FIELD(node, m, redblack_tree_t)->parent, m, redblack_tree_t)->left)
+//               {
+//                   /* and x is to the left */
+//                   /* case 2 - move x up and rotate */
+//                   node = GET_FIELD(node, m, redblack_tree_t)->parent;
+//                   avl_parent_rotate_with_right(node, m);
+//               }
+//               /* case 3 */
+//               GET_FIELD(GET_FIELD(node, m, redblack_tree_t)->parent, m, redblack_tree_t)->colour = black;
+//               GET_FIELD(GET_FIELD(GET_FIELD(node, m, redblack_tree_t)->parent, m, redblack_tree_t)->parent, m, redblack_tree_t)->colour = red;
+//               avl_parent_rotate_with_left(GET_FIELD(GET_FIELD(node, m, redblack_tree_t)->parent, m, redblack_tree_t)->parent, m);
+//         }
+//       }
+//    }
 }
 
 
 static void __make_some_repainting(void *node, bool old_was_red, unsigned int m)
 {
-  void  *n;
-  void  *s;
-
-  return;
-  if (old_was_red == false)
-    {
-      if (GET_FIELD(node, m, redblack_tree_t)->is_red == true)
-        GET_FIELD(node, m, redblack_tree_t)->is_red = false;
-      else
-      {
-        /* delete_case1(child): */
-        n = node;
-        /* this loop performs tail recursion on delete_case1(n) */
-        while (1)
-        {
-          /* delete_case1(n): */
-          if (GET_FIELD(n, m, redblack_tree_t)->parent != NULL)
-          {
-            /* delete_case2(n): */
-
-            s = __sibling(n, m);
-            if (GET_FIELD(s, m, redblack_tree_t)->is_red == true)
-            {
-              GET_FIELD(GET_FIELD(n, m, redblack_tree_t)->parent, m, redblack_tree_t)->is_red = true;
-              GET_FIELD(s, m, redblack_tree_t)->is_red = false;
-              if (n == GET_FIELD(GET_FIELD(n, m, redblack_tree_t)->parent, m, redblack_tree_t)->left)
-                avl_parent_rotate_with_left(GET_FIELD(n, m, redblack_tree_t)->parent, m);
-              else
-                avl_parent_rotate_with_right(GET_FIELD(n, m, redblack_tree_t)->parent, m);
-            }
-            /* delete_case3(n): */
-
-            s = __sibling(n, m);
-            if ((GET_FIELD(GET_FIELD(n, m, redblack_tree_t)->parent, m, redblack_tree_t)->is_red == false)
-                  && (GET_FIELD(s, m, redblack_tree_t)->is_red == false)
-                  && (GET_FIELD(GET_FIELD(s, m, redblack_tree_t)->left, m, redblack_tree_t)->is_red == false)
-                  && (GET_FIELD(GET_FIELD(s, m, redblack_tree_t)->right, m, redblack_tree_t)->is_red == false))
-            {
-              GET_FIELD(s, m, redblack_tree_t)->is_red = true;
-              /* delete_case1(n->parent): */
-              n = GET_FIELD(n, m, redblack_tree_t)->parent;
-              continue; /* tail recursion loop */
-            }
-            else
-            {
-              /* delete_case4(n): */
-
-              //s = sibling(n);//not needed
-              if ((GET_FIELD(GET_FIELD(n, m, redblack_tree_t)->parent, m, redblack_tree_t)->is_red == true)
-                  && (GET_FIELD(s, m, redblack_tree_t)->is_red == false)
-                  && (GET_FIELD(GET_FIELD(s, m, redblack_tree_t)->left, m, redblack_tree_t)->is_red == false)
-                  && (GET_FIELD(GET_FIELD(s, m, redblack_tree_t)->right, m, redblack_tree_t)->is_red == false))
-              {
-                GET_FIELD(s, m, redblack_tree_t)->is_red = true;
-                GET_FIELD(GET_FIELD(n, m, redblack_tree_t)->parent, m, redblack_tree_t)->is_red = false;
-                break;
-              }
-              else
-              {
-                /* delete_case5(n): */
-
-                //s = sibling(n);//not needed
-                if ((n == GET_FIELD(GET_FIELD(n, m, redblack_tree_t)->parent, m, redblack_tree_t)->left)
-                    && (GET_FIELD(s, m, redblack_tree_t)->is_red == false)
-                    && (GET_FIELD(GET_FIELD(s, m, redblack_tree_t)->left, m, redblack_tree_t)->is_red == true)
-                    && (GET_FIELD(GET_FIELD(s, m, redblack_tree_t)->right, m, redblack_tree_t)->is_red = false))
-                {
-                  GET_FIELD(s, m, redblack_tree_t)->is_red = true;
-                  GET_FIELD(GET_FIELD(s, m, redblack_tree_t)->left, m, redblack_tree_t)->is_red = false;
-                  avl_parent_rotate_with_right(s, m);
-                }
-                else if ((n == GET_FIELD(GET_FIELD(n, m, redblack_tree_t)->parent, m, redblack_tree_t)->right)
-                    && (GET_FIELD(s, m, redblack_tree_t)->is_red == false)
-                    && (GET_FIELD(GET_FIELD(s, m, redblack_tree_t)->right, m, redblack_tree_t)->is_red == true)
-                    && (GET_FIELD(GET_FIELD(s, m, redblack_tree_t)->left, m, redblack_tree_t)->is_red == false))
-                {
-                  GET_FIELD(s, m, redblack_tree_t)->is_red = true;
-                  GET_FIELD(GET_FIELD(s, m, redblack_tree_t)->right, m, redblack_tree_t)->is_red = false;
-                  avl_parent_rotate_with_left(s, m);
-                }
-                /* delete_case6(n): */
-
-                s = __sibling(n, m);
-                GET_FIELD(s, m, redblack_tree_t)->is_red = GET_FIELD(GET_FIELD(n, m, redblack_tree_t)->parent, m, redblack_tree_t)->is_red;
-                GET_FIELD(GET_FIELD(n, m, redblack_tree_t)->parent, m, redblack_tree_t)->is_red = false;
-                if (n == GET_FIELD(GET_FIELD(n, m, redblack_tree_t)->parent, m, redblack_tree_t)->left)
-                {
-                  /*
-                   * Here, s->right->color == RED.
-                   */
-                  GET_FIELD(GET_FIELD(s, m, redblack_tree_t)->right, m, redblack_tree_t)->is_red = false;
-                  avl_parent_rotate_with_left(GET_FIELD(n, m, redblack_tree_t)->parent, m);
-                }
-                else
-                {
-                  /*
-                   * Here, s->left->color == RED.
-                   */
-                  GET_FIELD(GET_FIELD(s, m, redblack_tree_t)->left, m, redblack_tree_t)->is_red = false;
-                  avl_parent_rotate_with_right(GET_FIELD(n, m, redblack_tree_t)->parent, m);
-                }
-                break;
-              }
-            }
-          }
-          else
-            break;
-          }
-        }
-    }
+//  void  *n;
+//  void  *s;
+//
+//  return;
+//  if (old_was_red == false)
+//    {
+//      if (GET_FIELD(node, m, redblack_tree_t)->colour == red)
+//        GET_FIELD(node, m, redblack_tree_t)->colour = black;
+//      else
+//      {
+//        /* delete_case1(child): */
+//        n = node;
+//        /* this loop performs tail recursion on delete_case1(n) */
+//        while (1)
+//        {
+//          /* delete_case1(n): */
+//          if (GET_FIELD(n, m, redblack_tree_t)->parent != NULL)
+//          {
+//            /* delete_case2(n): */
+//
+//            s = __sibling(n, m);
+//            if (GET_FIELD(s, m, redblack_tree_t)->colour == red)
+//            {
+//              GET_FIELD(GET_FIELD(n, m, redblack_tree_t)->parent, m, redblack_tree_t)->colour = red;
+//              GET_FIELD(s, m, redblack_tree_t)->colour = black;
+//              if (n == GET_FIELD(GET_FIELD(n, m, redblack_tree_t)->parent, m, redblack_tree_t)->left)
+//                avl_parent_rotate_with_left(GET_FIELD(n, m, redblack_tree_t)->parent, m);
+//              else
+//                avl_parent_rotate_with_right(GET_FIELD(n, m, redblack_tree_t)->parent, m);
+//            }
+//            /* delete_case3(n): */
+//
+//            s = __sibling(n, m);
+//            if ((GET_FIELD(GET_FIELD(n, m, redblack_tree_t)->parent, m, redblack_tree_t)->colour == black)
+//                  && (GET_FIELD(s, m, redblack_tree_t)->colour == black)
+//                  && (GET_FIELD(GET_FIELD(s, m, redblack_tree_t)->left, m, redblack_tree_t)->colour == black)
+//                  && (GET_FIELD(GET_FIELD(s, m, redblack_tree_t)->right, m, redblack_tree_t)->colour == black))
+//            {
+//              GET_FIELD(s, m, redblack_tree_t)->colour = red;
+//              /* delete_case1(n->parent): */
+//              n = GET_FIELD(n, m, redblack_tree_t)->parent;
+//              continue; /* tail recursion loop */
+//            }
+//            else
+//            {
+//              /* delete_case4(n): */
+//
+//              //s = sibling(n);//not needed
+//              if ((GET_FIELD(GET_FIELD(n, m, redblack_tree_t)->parent, m, redblack_tree_t)->colour == red)
+//                  && (GET_FIELD(s, m, redblack_tree_t)->colour == black)
+//                  && (GET_FIELD(GET_FIELD(s, m, redblack_tree_t)->left, m, redblack_tree_t)->colour == black)
+//                  && (GET_FIELD(GET_FIELD(s, m, redblack_tree_t)->right, m, redblack_tree_t)->colour == black))
+//              {
+//                GET_FIELD(s, m, redblack_tree_t)->colour = red;
+//                GET_FIELD(GET_FIELD(n, m, redblack_tree_t)->parent, m, redblack_tree_t)->colour = black;
+//                break;
+//              }
+//              else
+//              {
+//                /* delete_case5(n): */
+//
+//                //s = sibling(n);//not needed
+//                if ((n == GET_FIELD(GET_FIELD(n, m, redblack_tree_t)->parent, m, redblack_tree_t)->left)
+//                    && (GET_FIELD(s, m, redblack_tree_t)->colour == black)
+//                    && (GET_FIELD(GET_FIELD(s, m, redblack_tree_t)->left, m, redblack_tree_t)->colour == red)
+//                    && (GET_FIELD(GET_FIELD(s, m, redblack_tree_t)->right, m, redblack_tree_t)->colour = black))
+//                {
+//                  GET_FIELD(s, m, redblack_tree_t)->colour = red;
+//                  GET_FIELD(GET_FIELD(s, m, redblack_tree_t)->left, m, redblack_tree_t)->colour = black;
+//                  avl_parent_rotate_with_right(s, m);
+//                }
+//                else if ((n == GET_FIELD(GET_FIELD(n, m, redblack_tree_t)->parent, m, redblack_tree_t)->right)
+//                    && (GET_FIELD(s, m, redblack_tree_t)->colour == black)
+//                    && (GET_FIELD(GET_FIELD(s, m, redblack_tree_t)->right, m, redblack_tree_t)->colour == red)
+//                    && (GET_FIELD(GET_FIELD(s, m, redblack_tree_t)->left, m, redblack_tree_t)->colour == black))
+//                {
+//                  GET_FIELD(s, m, redblack_tree_t)->colour = red;
+//                  GET_FIELD(GET_FIELD(s, m, redblack_tree_t)->right, m, redblack_tree_t)->colour = black;
+//                  avl_parent_rotate_with_left(s, m);
+//                }
+//                /* delete_case6(n): */
+//
+//                s = __sibling(n, m);
+//                GET_FIELD(s, m, redblack_tree_t)->colour = GET_FIELD(GET_FIELD(n, m, redblack_tree_t)->parent, m, redblack_tree_t)->colour;
+//                GET_FIELD(GET_FIELD(n, m, redblack_tree_t)->parent, m, redblack_tree_t)->colour = black;
+//                if (n == GET_FIELD(GET_FIELD(n, m, redblack_tree_t)->parent, m, redblack_tree_t)->left)
+//                {
+//                  /*
+//                   * Here, s->right->color == RED.
+//                   */
+//                  GET_FIELD(GET_FIELD(s, m, redblack_tree_t)->right, m, redblack_tree_t)->colour = black;
+//                  avl_parent_rotate_with_left(GET_FIELD(n, m, redblack_tree_t)->parent, m);
+//                }
+//                else
+//                {
+//                  /*
+//                   * Here, s->left->color == RED.
+//                   */
+//                  GET_FIELD(GET_FIELD(s, m, redblack_tree_t)->left, m, redblack_tree_t)->colour = black;
+//                  avl_parent_rotate_with_right(GET_FIELD(n, m, redblack_tree_t)->parent, m);
+//                }
+//                break;
+//              }
+//            }
+//          }
+//          else
+//            break;
+//          }
+//        }
+//    }
 }
 
 
@@ -272,9 +337,9 @@ bool _redblack_tree_init(void *tree,
 }
 
 bool _redblack_tree_insert(void **tree,
-    void *new,
-    unsigned int m,
-    btree_compare_p compare_func)
+                          void *new,
+                          unsigned int m,
+                          bst_tree_compare_p compare_func)
 {
   void *it;
   int ret;
@@ -289,7 +354,6 @@ bool _redblack_tree_insert(void **tree,
   if (*tree == NULL)
   {
     *tree = new;
-    GET_FIELD(new, m, redblack_tree_t)->is_red = false;
   }
   else
   {
@@ -299,33 +363,34 @@ bool _redblack_tree_insert(void **tree,
       ret = compare_func(it, new);
       switch (ret)
       {
-        case BTREE_LEFT:
+        case BST_TREE_LEFT:
         if (GET_FIELD(it, m, redblack_tree_t)->left == NULL)
         {
           GET_FIELD(it, m, redblack_tree_t)->left = new;
           GET_FIELD(new, m, redblack_tree_t)->parent = it;
-          __make_some_painting(new, m);
-          return (true);
+          goto redblack_insert_success;
         }
         else
         it = GET_FIELD(it, m, redblack_tree_t)->left;
         break;
-        case BTREE_RIGHT:
+        case BST_TREE_RIGHT:
         if (GET_FIELD(it, m, redblack_tree_t)->right == NULL)
         {
           GET_FIELD(it, m, redblack_tree_t)->right = new;
           GET_FIELD(new, m, redblack_tree_t)->parent = it;
-          __make_some_painting(new, m);
-          return (true);
+          goto redblack_insert_success;
         }
         else
         it = GET_FIELD(it, m, redblack_tree_t)->right;
         break;
-        case BTREE_MATCH:
+        case BST_TREE_MATCH:
         return (false);
       }
     }
   }
+redblack_insert_success:
+  __make_some_painting(new, m);
+  GET_FIELD(*tree, m, redblack_tree_t)->colour = black;
   return (true);
 }
 
@@ -333,8 +398,8 @@ bool _redblack_tree_insert(void **tree,
 void *_redblack_tree_remove(void **tree,
                     void *key,
                     unsigned int m,
-                    btree_compare_p compare_func,
-                    btree_compare_key_p compare_key_func)
+                    bst_tree_compare_p compare_func,
+                    bst_tree_compare_key_p compare_key_func)
 {
   void *left_prev;
   void *right_prev;
@@ -356,17 +421,17 @@ void *_redblack_tree_remove(void **tree,
     ret = compare_key_func(it, key);
     switch (ret)
     {
-      case BTREE_LEFT:
+      case BST_TREE_LEFT:
         left_prev = it;
         right_prev = NULL;
         it = GET_FIELD(it, m, redblack_tree_t)->left;
         break;
-      case BTREE_RIGHT:
+      case BST_TREE_RIGHT:
         left_prev = NULL;
         right_prev = it;
         it = GET_FIELD(it, m, redblack_tree_t)->right;
         break;
-      case BTREE_MATCH:
+      case BST_TREE_MATCH:
         node = NULL;
         if (GET_FIELD(it, m, redblack_tree_t)->left == NULL
               && GET_FIELD(it, m, redblack_tree_t)->right == NULL
@@ -435,7 +500,7 @@ void *_redblack_tree_remove(void **tree,
                 *tree = node;
             }
           }
-          __make_some_repainting(node, GET_FIELD(it, m, redblack_tree_t)->is_red, m);
+          __make_some_repainting(node, GET_FIELD(it, m, redblack_tree_t)->colour, m);
           return (it);
     }
   }
@@ -446,7 +511,7 @@ void *_redblack_tree_remove(void **tree,
 bool _redblack_tree_graft(void **tree,
     void *subtree,
     unsigned int m,
-    btree_compare_p compare_func)
+    bst_tree_compare_p compare_func)
 {
   void *it;
   int ret;
@@ -467,17 +532,17 @@ bool _redblack_tree_graft(void **tree,
     ret = compare_func(it, subtree);
     switch (ret)
     {
-      case BTREE_LEFT:
+      case BST_TREE_LEFT:
       left_prev = it;
       right_prev = NULL;
       it = GET_FIELD(it, m, redblack_tree_t)->left;
       break;
-      case BTREE_RIGHT:
+      case BST_TREE_RIGHT:
       left_prev = NULL;
       right_prev = it;
       it = GET_FIELD(it, m, redblack_tree_t)->right;
       break;
-      case BTREE_MATCH:
+      case BST_TREE_MATCH:
       return (false);
     }
   }
@@ -502,7 +567,7 @@ bool _redblack_tree_graft(void **tree,
 void *_redblack_tree_prune(void **tree,
                    void *key,
                    unsigned int m,
-                   btree_compare_key_p compare_key_func)
+                   bst_tree_compare_key_p compare_key_func)
 {
   void *it;
   void *left_prev;
@@ -519,17 +584,17 @@ void *_redblack_tree_prune(void **tree,
     ret = compare_key_func(it, key);
     switch (ret)
     {
-      case BTREE_LEFT:
+      case BST_TREE_LEFT:
         left_prev = it;
         right_prev = NULL;
         it = GET_FIELD(it, m, redblack_tree_t)->left;
         break;
-      case BTREE_RIGHT:
+      case BST_TREE_RIGHT:
         left_prev = NULL;
         right_prev = it;
         it = GET_FIELD(it, m, redblack_tree_t)->right;
         break;
-      case BTREE_MATCH:
+      case BST_TREE_MATCH:
         if (left_prev != NULL)
           GET_FIELD(left_prev, m, redblack_tree_t)->left = NULL;
         else

@@ -31,19 +31,19 @@ typedef struct test_splay_tree_s
 
   } test_splay_tree_t;
 
-static btree_compare_e BTREE_COMPARE(void *n1, void *n2)
+static bst_tree_compare_e BTREE_COMPARE(void *n1, void *n2)
   {
     test_splay_tree_t *bt1 = (test_splay_tree_t *)n1;
     test_splay_tree_t *bt2 = (test_splay_tree_t *)n2;
 
     if (bt2->key < bt1->key)
-      return (BTREE_LEFT);
+      return (BST_TREE_LEFT);
     if (bt2->key > bt1->key)
-      return (BTREE_RIGHT);
-    return (BTREE_MATCH);
+      return (BST_TREE_RIGHT);
+    return (BST_TREE_MATCH);
   }
 
-static btree_compare_e BTREE_COMPARE_KEY(void *n1, void *key)
+static bst_tree_compare_e BTREE_COMPARE_KEY(void *n1, void *key)
   {
     int k = (int)key;
     test_splay_tree_t *bt1 = (test_splay_tree_t *)n1;
@@ -52,10 +52,10 @@ static btree_compare_e BTREE_COMPARE_KEY(void *n1, void *key)
 //    if (n1 == NULL)
 //      __asm__ volatile ("int $0x3");
     if (k < bt1->key)
-      return (BTREE_LEFT);
+      return (BST_TREE_LEFT);
     if (k > bt1->key)
-      return (BTREE_RIGHT);
-    return (BTREE_MATCH);
+      return (BST_TREE_RIGHT);
+    return (BST_TREE_MATCH);
   }
 
 void Testsplay_tree_init(CuTest *tc)
@@ -63,9 +63,9 @@ void Testsplay_tree_init(CuTest *tc)
     test_splay_tree_t test;
     bool ret;
 
-    ret = _btree_init(NULL, 0);
+    ret = _bst_tree_init(NULL, 0);
     CuAssertTrue(tc, !ret);
-    ret = btree_init(&test, splay_tree);
+    ret = bst_tree_init(&test, splay_tree);
     CuAssertTrue(tc, ret);
   }
 
@@ -78,7 +78,7 @@ void Testsplay_tree_insert(CuTest *tc)
     root = NULL;
     elem = NULL;
     /* Basically, a splay tree differs from a binary tree through the lookup, not the insert. */
-    ret = _btree_insert(NULL, elem, 0, BTREE_COMPARE);
+    ret = _bst_tree_insert(NULL, elem, 0, BTREE_COMPARE);
     CuAssertTrue(tc, !ret);
     ret = splay_tree_insert(root, NULL, splay_tree, BTREE_COMPARE);
     CuAssertTrue(tc, !ret);

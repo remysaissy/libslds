@@ -13,9 +13,9 @@ void    *avl_single_rotate_with_left(void *node,
 {
   void  *tmp;
 
-  tmp = GET_FIELD(node, m, btree_t)->left;
-  GET_FIELD(node, m, btree_t)->left = GET_FIELD(tmp, m, btree_t)->right;
-  GET_FIELD(tmp, m, btree_t)->right = node;
+  tmp = GET_FIELD(node, m, bst_tree_t)->left;
+  GET_FIELD(node, m, bst_tree_t)->left = GET_FIELD(tmp, m, bst_tree_t)->right;
+  GET_FIELD(tmp, m, bst_tree_t)->right = node;
   return (tmp);
 }
 
@@ -24,9 +24,9 @@ void    *avl_single_rotate_with_right(void *node,
 {
   void  *tmp;
 
-  tmp = GET_FIELD(node, m, btree_t)->right;
-  GET_FIELD(node, m, btree_t)->right = GET_FIELD(tmp, m, btree_t)->left;
-  GET_FIELD(tmp, m, btree_t)->left = node;
+  tmp = GET_FIELD(node, m, bst_tree_t)->right;
+  GET_FIELD(node, m, bst_tree_t)->right = GET_FIELD(tmp, m, bst_tree_t)->left;
+  GET_FIELD(tmp, m, bst_tree_t)->left = node;
   return (tmp);
 }
 
@@ -36,12 +36,12 @@ void    *avl_parent_rotate_with_left(void *node,
 {
   void  *tmp;
 
-  tmp = GET_FIELD(node, m, ebtree_t)->left;
-  GET_FIELD(node, m, ebtree_t)->left = GET_FIELD(tmp, m, ebtree_t)->right;
-  if (GET_FIELD(tmp, m, ebtree_t)->right != NULL)
-    GET_FIELD(GET_FIELD(tmp, m, ebtree_t)->right, m, ebtree_t)->parent = node;
-  GET_FIELD(tmp, m, ebtree_t)->right = node;
-  GET_FIELD(node, m, ebtree_t)->parent = tmp;
+  tmp = GET_FIELD(node, m, ebst_tree_t)->left;
+  GET_FIELD(node, m, ebst_tree_t)->left = GET_FIELD(tmp, m, ebst_tree_t)->right;
+  if (GET_FIELD(tmp, m, ebst_tree_t)->right != NULL)
+    GET_FIELD(GET_FIELD(tmp, m, ebst_tree_t)->right, m, ebst_tree_t)->parent = node;
+  GET_FIELD(tmp, m, ebst_tree_t)->right = node;
+  GET_FIELD(node, m, ebst_tree_t)->parent = tmp;
   return (tmp);
 }
 
@@ -50,11 +50,11 @@ void    *avl_parent_rotate_with_right(void *node,
 {
   void  *tmp;
 
-  tmp = GET_FIELD(node, m, ebtree_t)->right;
-  GET_FIELD(node, m, ebtree_t)->right = GET_FIELD(tmp, m, ebtree_t)->left;
-  if (GET_FIELD(tmp, m, ebtree_t)->left != NULL)
-    GET_FIELD(GET_FIELD(tmp, m, ebtree_t)->left, m, ebtree_t)->parent = node;
-  GET_FIELD(tmp, m, ebtree_t)->left = node;
-  GET_FIELD(node, m, ebtree_t)->parent = tmp;
+  tmp = GET_FIELD(node, m, ebst_tree_t)->right;
+  GET_FIELD(node, m, ebst_tree_t)->right = GET_FIELD(tmp, m, ebst_tree_t)->left;
+  if (GET_FIELD(tmp, m, ebst_tree_t)->left != NULL)
+    GET_FIELD(GET_FIELD(tmp, m, ebst_tree_t)->left, m, ebst_tree_t)->parent = node;
+  GET_FIELD(tmp, m, ebst_tree_t)->left = node;
+  GET_FIELD(node, m, ebst_tree_t)->parent = tmp;
   return (tmp);
 }

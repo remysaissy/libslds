@@ -31,28 +31,28 @@ typedef struct test_redblack_tree_s
 
   } test_redblack_tree_t;
 
-static btree_compare_e BTREE_COMPARE(void *n1, void *n2)
+static bst_tree_compare_e BTREE_COMPARE(void *n1, void *n2)
   {
     test_redblack_tree_t *bt1 = (test_redblack_tree_t *)n1;
     test_redblack_tree_t *bt2 = (test_redblack_tree_t *)n2;
 
     if (bt2->key < bt1->key)
-      return (BTREE_LEFT);
+      return (BST_TREE_LEFT);
     if (bt2->key > bt1->key)
-      return (BTREE_RIGHT);
-    return (BTREE_MATCH);
+      return (BST_TREE_RIGHT);
+    return (BST_TREE_MATCH);
   }
 
-static btree_compare_e BTREE_COMPARE_KEY(void *n1, void *key)
+static bst_tree_compare_e BTREE_COMPARE_KEY(void *n1, void *key)
   {
     int k = (int)key;
     test_redblack_tree_t *bt1 = (test_redblack_tree_t *)n1;
 
     if (k < bt1->key)
-      return (BTREE_LEFT);
+      return (BST_TREE_LEFT);
     if (k > bt1->key)
-      return (BTREE_RIGHT);
-    return (BTREE_MATCH);
+      return (BST_TREE_RIGHT);
+    return (BST_TREE_MATCH);
   }
 
 void Testredblack_tree_init(CuTest *tc)
@@ -60,7 +60,7 @@ void Testredblack_tree_init(CuTest *tc)
     test_redblack_tree_t test;
     bool ret;
 
-    ret = _btree_init(NULL, 0);
+    ret = _bst_tree_init(NULL, 0);
     CuAssertTrue(tc, !ret);
     ret = redblack_tree_init(&test, redblack_tree);
     CuAssertTrue(tc, ret);
@@ -117,7 +117,7 @@ void Testredblack_tree_insert_case1(CuTest *tc)
     elem->key = 2;
     ret = redblack_tree_insert(root, elem, redblack_tree, BTREE_COMPARE);
     CuAssertTrue(tc, ret);
-    CuAssertTrue(tc, !root->redblack_tree.is_red);
+    CuAssertIntEquals(tc, black, root->redblack_tree.colour);
   }
 
 void Testredblack_tree_insert_case2(CuTest *tc)
@@ -135,8 +135,8 @@ void Testredblack_tree_insert_case2(CuTest *tc)
     elem->key = 1;
     ret = redblack_tree_insert(root, elem, redblack_tree, BTREE_COMPARE);
     CuAssertTrue(tc, ret);
-    CuAssertTrue(tc, !root->redblack_tree.is_red);
-    CuAssertTrue(tc, ((test_redblack_tree_t *)root->redblack_tree.left)->redblack_tree.is_red);
+    CuAssertIntEquals(tc, black, root->redblack_tree.colour);
+    CuAssertIntEquals(tc, red, ((test_redblack_tree_t *)root->redblack_tree.left)->redblack_tree.colour);
   }
 
 void Testredblack_tree_insert_case3(CuTest *tc)
@@ -158,9 +158,9 @@ void Testredblack_tree_insert_case3(CuTest *tc)
     elem->key = 3;
     ret = redblack_tree_insert(root, elem, redblack_tree, BTREE_COMPARE);
     CuAssertTrue(tc, ret);
-    CuAssertTrue(tc, !root->redblack_tree.is_red);
-    CuAssertTrue(tc, ((test_redblack_tree_t *)root->redblack_tree.left)->redblack_tree.is_red);
-    CuAssertTrue(tc, ((test_redblack_tree_t *)root->redblack_tree.right)->redblack_tree.is_red);
+    CuAssertIntEquals(tc, black, root->redblack_tree.colour);
+    CuAssertIntEquals(tc, red, ((test_redblack_tree_t *)root->redblack_tree.left)->redblack_tree.colour);
+    CuAssertIntEquals(tc, red, ((test_redblack_tree_t *)root->redblack_tree.right)->redblack_tree.colour);
   }
 
 void Testredblack_tree_insert_case4(CuTest *tc)
@@ -186,10 +186,10 @@ void Testredblack_tree_insert_case4(CuTest *tc)
     elem->key = 4;
     ret = redblack_tree_insert(root, elem, redblack_tree, BTREE_COMPARE);
     CuAssertTrue(tc, ret);
-    CuAssertTrue(tc, !root->redblack_tree.is_red);
-    CuAssertTrue(tc, !((test_redblack_tree_t *)root->redblack_tree.left)->redblack_tree.is_red);
-    CuAssertTrue(tc, !((test_redblack_tree_t *)root->redblack_tree.right)->redblack_tree.is_red);
-    CuAssertTrue(tc, ((test_redblack_tree_t *)((test_redblack_tree_t *)root->redblack_tree.right)->redblack_tree.right)->redblack_tree.is_red);
+    CuAssertIntEquals(tc, black, root->redblack_tree.colour);
+    CuAssertIntEquals(tc, black, ((test_redblack_tree_t *)root->redblack_tree.left)->redblack_tree.colour);
+    CuAssertIntEquals(tc, black, ((test_redblack_tree_t *)root->redblack_tree.right)->redblack_tree.colour);
+    CuAssertIntEquals(tc, red, ((test_redblack_tree_t *)((test_redblack_tree_t *)root->redblack_tree.right)->redblack_tree.right)->redblack_tree.colour);
   }
 
 void Testredblack_tree_insert_case5(CuTest *tc)
@@ -219,12 +219,12 @@ void Testredblack_tree_insert_case5(CuTest *tc)
     elem->key = 8;
     ret = redblack_tree_insert(root, elem, redblack_tree, BTREE_COMPARE);
     CuAssertTrue(tc, ret);
-    CuAssertTrue(tc, !root->redblack_tree.is_red);
-    CuAssertTrue(tc, !((test_redblack_tree_t *)root->redblack_tree.left)->redblack_tree.is_red);
-    CuAssertTrue(tc, !((test_redblack_tree_t *)root->redblack_tree.right)->redblack_tree.is_red);
+    CuAssertIntEquals(tc, black, root->redblack_tree.colour);
+    CuAssertIntEquals(tc, black, ((test_redblack_tree_t *)root->redblack_tree.left)->redblack_tree.colour);
+    CuAssertIntEquals(tc, black, ((test_redblack_tree_t *)root->redblack_tree.right)->redblack_tree.colour);
     CuAssertIntEquals(tc, 4, ((test_redblack_tree_t *)root->redblack_tree.right)->key);
-    CuAssertTrue(tc, ((test_redblack_tree_t *)((test_redblack_tree_t *)root->redblack_tree.right)->redblack_tree.right)->redblack_tree.is_red);
-    CuAssertTrue(tc, ((test_redblack_tree_t *)((test_redblack_tree_t *)root->redblack_tree.right)->redblack_tree.left)->redblack_tree.is_red);
+    CuAssertIntEquals(tc, red, ((test_redblack_tree_t *)((test_redblack_tree_t *)root->redblack_tree.right)->redblack_tree.right)->redblack_tree.colour);
+    CuAssertIntEquals(tc, red, ((test_redblack_tree_t *)((test_redblack_tree_t *)root->redblack_tree.right)->redblack_tree.left)->redblack_tree.colour);
     CuAssertIntEquals(tc, 3, ((test_redblack_tree_t *)((test_redblack_tree_t *)root->redblack_tree.right)->redblack_tree.left)->key);
     CuAssertIntEquals(tc, 8, ((test_redblack_tree_t *)((test_redblack_tree_t *)root->redblack_tree.right)->redblack_tree.right)->key);
   }
@@ -260,15 +260,15 @@ void Testredblack_tree_insert_case6(CuTest *tc)
     elem->key = 6;
     ret = redblack_tree_insert(root, elem, redblack_tree, BTREE_COMPARE);
     CuAssertTrue(tc, ret);
-    CuAssertTrue(tc, !root->redblack_tree.is_red);
-    CuAssertTrue(tc, !((test_redblack_tree_t *)root->redblack_tree.left)->redblack_tree.is_red);
-    CuAssertTrue(tc, ((test_redblack_tree_t *)root->redblack_tree.right)->redblack_tree.is_red);
+    CuAssertIntEquals(tc, black, root->redblack_tree.colour);
+    CuAssertIntEquals(tc, black, ((test_redblack_tree_t *)root->redblack_tree.left)->redblack_tree.colour);
+    CuAssertIntEquals(tc, red, ((test_redblack_tree_t *)root->redblack_tree.right)->redblack_tree.colour);
     CuAssertIntEquals(tc, 4, ((test_redblack_tree_t *)root->redblack_tree.right)->key);
-    CuAssertTrue(tc, !((test_redblack_tree_t *)((test_redblack_tree_t *)root->redblack_tree.right)->redblack_tree.right)->redblack_tree.is_red);
-    CuAssertTrue(tc, !((test_redblack_tree_t *)((test_redblack_tree_t *)root->redblack_tree.right)->redblack_tree.left)->redblack_tree.is_red);
+    CuAssertIntEquals(tc, black, ((test_redblack_tree_t *)((test_redblack_tree_t *)root->redblack_tree.right)->redblack_tree.right)->redblack_tree.colour);
+    CuAssertIntEquals(tc, black, ((test_redblack_tree_t *)((test_redblack_tree_t *)root->redblack_tree.right)->redblack_tree.left)->redblack_tree.colour);
     CuAssertIntEquals(tc, 3, ((test_redblack_tree_t *)((test_redblack_tree_t *)root->redblack_tree.right)->redblack_tree.left)->key);
     CuAssertIntEquals(tc, 8, ((test_redblack_tree_t *)((test_redblack_tree_t *)root->redblack_tree.right)->redblack_tree.right)->key);
-    CuAssertTrue(tc, ((test_redblack_tree_t *)((test_redblack_tree_t *)((test_redblack_tree_t *)root->redblack_tree.right)->redblack_tree.right)->redblack_tree.left)->redblack_tree.is_red);
+    CuAssertIntEquals(tc, red, ((test_redblack_tree_t *)((test_redblack_tree_t *)((test_redblack_tree_t *)root->redblack_tree.right)->redblack_tree.right)->redblack_tree.left)->redblack_tree.colour);
     CuAssertIntEquals(tc, 6, ((test_redblack_tree_t *)((test_redblack_tree_t *)((test_redblack_tree_t *)root->redblack_tree.right)->redblack_tree.right)->redblack_tree.left)->key);
   }
 
