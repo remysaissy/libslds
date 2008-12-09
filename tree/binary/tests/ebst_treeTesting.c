@@ -176,8 +176,8 @@ void Testebst_tree_remove(CuTest *tc)
     CuAssertIntEquals(tc, 3, ((test_ebst_tree_t *)root->btree.left)->key);
     CuAssertIntEquals(tc, 1, ((test_ebst_tree_t *)((test_ebst_tree_t *)root->btree.left)->btree.left)->key);
     CuAssertPtrEquals(tc, NULL, root->btree.parent);
-    CuAssertPtrEquals(tc, root, ((test_ebst_tree_t *)elem->btree.right)->btree.parent);
-    CuAssertPtrEquals(tc, root, ((test_ebst_tree_t *)elem->btree.left)->btree.parent);
+    CuAssertPtrEquals(tc, root, ((test_ebst_tree_t *)root->btree.right)->btree.parent);
+    CuAssertPtrEquals(tc, root, ((test_ebst_tree_t *)root->btree.left)->btree.parent);
   }
 
 

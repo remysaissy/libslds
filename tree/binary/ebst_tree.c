@@ -132,47 +132,47 @@ void *_ebst_tree_remove(void **tree,
             *tree = NULL;
           else
           {
-            if (GET_FIELD(it, m, ebst_tree_t)->left != NULL)
+            if (GET_FIELD(it, m, ebst_tree_t)->right != NULL)
             {
-              /* Get the deepest node on the right of the left child. */
+              /* Get the deepest node on the left of the right child. */
 
-              node = GET_FIELD(it, m, ebst_tree_t)->left;
-              while (GET_FIELD(node, m, ebst_tree_t)->right != NULL)
-                node = GET_FIELD(node, m, ebst_tree_t)->right;
+              node = GET_FIELD(it, m, ebst_tree_t)->right;
+              while (GET_FIELD(node, m, ebst_tree_t)->left != NULL)
+                node = GET_FIELD(node, m, ebst_tree_t)->left;
               if (GET_FIELD(node, m, ebst_tree_t)->parent != it)
               {
                 parent = GET_FIELD(node, m, ebst_tree_t)->parent;
-                GET_FIELD(parent, m, ebst_tree_t)->right = GET_FIELD(node, m, ebst_tree_t)->left;
-                if (GET_FIELD(node, m, ebst_tree_t)->left != NULL)
-                  GET_FIELD(GET_FIELD(node, m, ebst_tree_t)->left, m, ebst_tree_t)->parent = parent;
-                GET_FIELD(node, m, ebst_tree_t)->left = GET_FIELD(it, m, ebst_tree_t)->left;
-                GET_FIELD(GET_FIELD(it, m, ebst_tree_t)->left, m, ebst_tree_t)->parent = node;
-              }
-              GET_FIELD(node, m, ebst_tree_t)->right = GET_FIELD(it, m, ebst_tree_t)->right;
-              if (GET_FIELD(it, m, ebst_tree_t)->right != NULL)
+                GET_FIELD(parent, m, ebst_tree_t)->left = GET_FIELD(node, m, ebst_tree_t)->right;
+                if (GET_FIELD(node, m, ebst_tree_t)->right != NULL)
+                  GET_FIELD(GET_FIELD(node, m, ebst_tree_t)->right, m, ebst_tree_t)->parent = parent;
+                GET_FIELD(node, m, ebst_tree_t)->right = GET_FIELD(it, m, ebst_tree_t)->right;
                 GET_FIELD(GET_FIELD(it, m, ebst_tree_t)->right, m, ebst_tree_t)->parent = node;
+              }
+              GET_FIELD(node, m, ebst_tree_t)->left = GET_FIELD(it, m, ebst_tree_t)->left;
+              if (GET_FIELD(it, m, ebst_tree_t)->left != NULL)
+                GET_FIELD(GET_FIELD(it, m, ebst_tree_t)->left, m, ebst_tree_t)->parent = node;
             }
             else
             {
-              if (GET_FIELD(it, m, ebst_tree_t)->right != NULL)
+              if (GET_FIELD(it, m, ebst_tree_t)->left != NULL)
               {
-                /* Get the deepest node on the left of the right child. */
+                /* Get the deepest node on the right of the left child. */
 
-                node = GET_FIELD(it, m, ebst_tree_t)->right;
-                while (GET_FIELD(node, m, ebst_tree_t)->left != NULL)
-                  node = GET_FIELD(node, m, ebst_tree_t)->left;
+                node = GET_FIELD(it, m, ebst_tree_t)->left;
+                while (GET_FIELD(node, m, ebst_tree_t)->right != NULL)
+                  node = GET_FIELD(node, m, ebst_tree_t)->right;
                 if (GET_FIELD(node, m, ebst_tree_t)->parent != it)
                 {
                   parent = GET_FIELD(node, m, ebst_tree_t)->parent;
-                  GET_FIELD(parent, m, ebst_tree_t)->left = GET_FIELD(node, m, ebst_tree_t)->right;
-                  if (GET_FIELD(node, m, ebst_tree_t)->right != NULL)
-                    GET_FIELD(GET_FIELD(node, m, ebst_tree_t)->right, m, ebst_tree_t)->parent = parent;
-                  GET_FIELD(node, m, ebst_tree_t)->right = GET_FIELD(it, m, ebst_tree_t)->right;
-                  GET_FIELD(GET_FIELD(it, m, ebst_tree_t)->right, m, ebst_tree_t)->parent = node;
-                }
-                GET_FIELD(node, m, ebst_tree_t)->left = GET_FIELD(it, m, ebst_tree_t)->left;
-                if (GET_FIELD(it, m, ebst_tree_t)->left != NULL)
+                  GET_FIELD(parent, m, ebst_tree_t)->right = GET_FIELD(node, m, ebst_tree_t)->left;
+                  if (GET_FIELD(node, m, ebst_tree_t)->left != NULL)
+                    GET_FIELD(GET_FIELD(node, m, ebst_tree_t)->left, m, ebst_tree_t)->parent = parent;
+                  GET_FIELD(node, m, ebst_tree_t)->left = GET_FIELD(it, m, ebst_tree_t)->left;
                   GET_FIELD(GET_FIELD(it, m, ebst_tree_t)->left, m, ebst_tree_t)->parent = node;
+                }
+                GET_FIELD(node, m, ebst_tree_t)->right = GET_FIELD(it, m, ebst_tree_t)->right;
+                if (GET_FIELD(it, m, ebst_tree_t)->right != NULL)
+                  GET_FIELD(GET_FIELD(it, m, ebst_tree_t)->right, m, ebst_tree_t)->parent = node;
               }
             }
             if (left_prev != NULL)
