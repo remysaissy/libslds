@@ -208,6 +208,17 @@ void    *_ebst_tree_remove(void **tree,
               bst_tree_compare_key_p compare_key_func);
 
 /**
+ * For internal use only.
+ */
+void    *_internal_ebst_tree_remove(void **tree,
+              void *key,
+              unsigned int m,
+              bst_tree_compare_p compare_func,
+              bst_tree_compare_key_p compare_key_func,
+              void **replacing_node);
+
+
+/**
  * Graft a subtree in a binary tree.
  * @param tree The root of the tree.
  * @param subtree subtree to be graft.

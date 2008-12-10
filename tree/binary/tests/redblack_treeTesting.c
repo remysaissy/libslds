@@ -77,10 +77,6 @@ void Testredblack_tree_insert(CuTest *tc)
     ret = _redblack_tree_insert(NULL, elem, 0, BTREE_COMPARE);
     CuAssertTrue(tc, !ret);
     ret = redblack_tree_insert(root, NULL, redblack_tree, BTREE_COMPARE);
-//    ret = _redblack_tree_insert(&(root),
-//            (NULL),
-//             (unsigned int)offsetof(typeof(*(root)), redblack_tree),
-//             BTREE_COMPARE);
     CuAssertTrue(tc, !ret);
     ret = redblack_tree_insert(root, elem, redblack_tree, NULL);
     CuAssertTrue(tc, !ret);
@@ -147,129 +143,101 @@ void Testredblack_tree_insert_case3(CuTest *tc)
 
     root = NULL;
     elem = malloc(sizeof(*elem));
-    elem->key = 2;
-    ret = redblack_tree_insert(root, elem, redblack_tree, BTREE_COMPARE);
-    CuAssertTrue(tc, ret);
-    elem = malloc(sizeof(*elem));
-    elem->key = 1;
-    ret = redblack_tree_insert(root, elem, redblack_tree, BTREE_COMPARE);
-    CuAssertTrue(tc, ret);
-    elem = malloc(sizeof(*elem));
     elem->key = 3;
+    ret = redblack_tree_insert(root, elem, redblack_tree, BTREE_COMPARE);
+    CuAssertTrue(tc, ret);
+    elem = malloc(sizeof(*elem));
+    elem->key = 4;
+    ret = redblack_tree_insert(root, elem, redblack_tree, BTREE_COMPARE);
+    CuAssertTrue(tc, ret);
+    elem = malloc(sizeof(*elem));
+    elem->key = 2;
     ret = redblack_tree_insert(root, elem, redblack_tree, BTREE_COMPARE);
     CuAssertTrue(tc, ret);
     CuAssertIntEquals(tc, black, root->redblack_tree.colour);
     CuAssertIntEquals(tc, red, ((test_redblack_tree_t *)root->redblack_tree.left)->redblack_tree.colour);
     CuAssertIntEquals(tc, red, ((test_redblack_tree_t *)root->redblack_tree.right)->redblack_tree.colour);
-  }
-
-void Testredblack_tree_insert_case4(CuTest *tc)
-  {
-    test_redblack_tree_t *root;
-    test_redblack_tree_t *elem;
-    bool ret;
-
-    root = NULL;
-    elem = malloc(sizeof(*elem));
-    elem->key = 2;
-    ret = redblack_tree_insert(root, elem, redblack_tree, BTREE_COMPARE);
-    CuAssertTrue(tc, ret);
     elem = malloc(sizeof(*elem));
     elem->key = 1;
-    ret = redblack_tree_insert(root, elem, redblack_tree, BTREE_COMPARE);
-    CuAssertTrue(tc, ret);
-    elem = malloc(sizeof(*elem));
-    elem->key = 3;
-    ret = redblack_tree_insert(root, elem, redblack_tree, BTREE_COMPARE);
-    CuAssertTrue(tc, ret);
-    elem = malloc(sizeof(*elem));
-    elem->key = 4;
     ret = redblack_tree_insert(root, elem, redblack_tree, BTREE_COMPARE);
     CuAssertTrue(tc, ret);
     CuAssertIntEquals(tc, black, root->redblack_tree.colour);
     CuAssertIntEquals(tc, black, ((test_redblack_tree_t *)root->redblack_tree.left)->redblack_tree.colour);
     CuAssertIntEquals(tc, black, ((test_redblack_tree_t *)root->redblack_tree.right)->redblack_tree.colour);
-    CuAssertIntEquals(tc, red, ((test_redblack_tree_t *)((test_redblack_tree_t *)root->redblack_tree.right)->redblack_tree.right)->redblack_tree.colour);
+    CuAssertIntEquals(tc, red, ((test_redblack_tree_t *)((test_redblack_tree_t *)root->redblack_tree.left)->redblack_tree.left)->redblack_tree.colour);
   }
+
+void Testredblack_tree_insert_case4(CuTest *tc)
+{
+  test_redblack_tree_t *root;
+  test_redblack_tree_t *elem;
+  test_redblack_tree_t  *keep;
+  bool ret;
+
+  root = NULL;
+  elem = malloc(sizeof(*elem));
+  elem->key = 3;
+  ret = redblack_tree_insert(root, elem, redblack_tree, BTREE_COMPARE);
+  CuAssertTrue(tc, ret);
+  elem = malloc(sizeof(*elem));
+  elem->key = 4;
+  keep = elem;
+  ret = redblack_tree_insert(root, elem, redblack_tree, BTREE_COMPARE);
+  CuAssertTrue(tc, ret);
+  elem = malloc(sizeof(*elem));
+  elem->key = 1;
+  ret = redblack_tree_insert(root, elem, redblack_tree, BTREE_COMPARE);
+  CuAssertTrue(tc, ret);
+  keep->redblack_tree.colour = black;
+  CuAssertIntEquals(tc, black, root->redblack_tree.colour);
+  CuAssertIntEquals(tc, red, ((test_redblack_tree_t *)root->redblack_tree.left)->redblack_tree.colour);
+  CuAssertIntEquals(tc, black, ((test_redblack_tree_t *)root->redblack_tree.right)->redblack_tree.colour);
+  elem = malloc(sizeof(*elem));
+  elem->key = 2;
+  ret = redblack_tree_insert(root, elem, redblack_tree, BTREE_COMPARE);
+  CuAssertTrue(tc, ret);
+  CuAssertIntEquals(tc, black, root->redblack_tree.colour);
+  CuAssertIntEquals(tc, black, ((test_redblack_tree_t *)root->redblack_tree.right)->redblack_tree.colour);
+  CuAssertIntEquals(tc, red, ((test_redblack_tree_t *)root->redblack_tree.left)->redblack_tree.colour);
+  CuAssertIntEquals(tc, red, ((test_redblack_tree_t *)((test_redblack_tree_t *)root->redblack_tree.left)->redblack_tree.left)->redblack_tree.colour);
+  CuAssertIntEquals(tc, 2, ((test_redblack_tree_t *)root->redblack_tree.left)->key);
+  CuAssertIntEquals(tc, 1, ((test_redblack_tree_t *)((test_redblack_tree_t *)root->redblack_tree.left)->redblack_tree.left)->key);
+}
 
 void Testredblack_tree_insert_case5(CuTest *tc)
   {
     test_redblack_tree_t *root;
     test_redblack_tree_t *elem;
+    test_redblack_tree_t    *keep;
     bool ret;
 
     root = NULL;
-    elem = malloc(sizeof(*elem));
-    elem->key = 2;
-    ret = redblack_tree_insert(root, elem, redblack_tree, BTREE_COMPARE);
-    CuAssertTrue(tc, ret);
-    elem = malloc(sizeof(*elem));
-    elem->key = 1;
-    ret = redblack_tree_insert(root, elem, redblack_tree, BTREE_COMPARE);
-    CuAssertTrue(tc, ret);
     elem = malloc(sizeof(*elem));
     elem->key = 3;
     ret = redblack_tree_insert(root, elem, redblack_tree, BTREE_COMPARE);
     CuAssertTrue(tc, ret);
     elem = malloc(sizeof(*elem));
     elem->key = 4;
+    keep = elem;
     ret = redblack_tree_insert(root, elem, redblack_tree, BTREE_COMPARE);
     CuAssertTrue(tc, ret);
-    elem = malloc(sizeof(*elem));
-    elem->key = 8;
-    ret = redblack_tree_insert(root, elem, redblack_tree, BTREE_COMPARE);
-    CuAssertTrue(tc, ret);
-    CuAssertIntEquals(tc, black, root->redblack_tree.colour);
-    CuAssertIntEquals(tc, black, ((test_redblack_tree_t *)root->redblack_tree.left)->redblack_tree.colour);
-    CuAssertIntEquals(tc, black, ((test_redblack_tree_t *)root->redblack_tree.right)->redblack_tree.colour);
-    CuAssertIntEquals(tc, 4, ((test_redblack_tree_t *)root->redblack_tree.right)->key);
-    CuAssertIntEquals(tc, red, ((test_redblack_tree_t *)((test_redblack_tree_t *)root->redblack_tree.right)->redblack_tree.right)->redblack_tree.colour);
-    CuAssertIntEquals(tc, red, ((test_redblack_tree_t *)((test_redblack_tree_t *)root->redblack_tree.right)->redblack_tree.left)->redblack_tree.colour);
-    CuAssertIntEquals(tc, 3, ((test_redblack_tree_t *)((test_redblack_tree_t *)root->redblack_tree.right)->redblack_tree.left)->key);
-    CuAssertIntEquals(tc, 8, ((test_redblack_tree_t *)((test_redblack_tree_t *)root->redblack_tree.right)->redblack_tree.right)->key);
-  }
-
-void Testredblack_tree_insert_case6(CuTest *tc)
-  {
-    test_redblack_tree_t *root;
-    test_redblack_tree_t *elem;
-    bool ret;
-
-    root = NULL;
     elem = malloc(sizeof(*elem));
     elem->key = 2;
     ret = redblack_tree_insert(root, elem, redblack_tree, BTREE_COMPARE);
     CuAssertTrue(tc, ret);
+    keep->redblack_tree.colour = black;
     elem = malloc(sizeof(*elem));
     elem->key = 1;
     ret = redblack_tree_insert(root, elem, redblack_tree, BTREE_COMPARE);
     CuAssertTrue(tc, ret);
-    elem = malloc(sizeof(*elem));
-    elem->key = 3;
-    ret = redblack_tree_insert(root, elem, redblack_tree, BTREE_COMPARE);
-    CuAssertTrue(tc, ret);
-    elem = malloc(sizeof(*elem));
-    elem->key = 4;
-    ret = redblack_tree_insert(root, elem, redblack_tree, BTREE_COMPARE);
-    CuAssertTrue(tc, ret);
-    elem = malloc(sizeof(*elem));
-    elem->key = 8;
-    ret = redblack_tree_insert(root, elem, redblack_tree, BTREE_COMPARE);
-    CuAssertTrue(tc, ret);
-    elem = malloc(sizeof(*elem));
-    elem->key = 6;
-    ret = redblack_tree_insert(root, elem, redblack_tree, BTREE_COMPARE);
-    CuAssertTrue(tc, ret);
     CuAssertIntEquals(tc, black, root->redblack_tree.colour);
-    CuAssertIntEquals(tc, black, ((test_redblack_tree_t *)root->redblack_tree.left)->redblack_tree.colour);
+    CuAssertIntEquals(tc, 2, root->key);
+    CuAssertIntEquals(tc, red, ((test_redblack_tree_t *)root->redblack_tree.left)->redblack_tree.colour);
+    CuAssertIntEquals(tc, 1, ((test_redblack_tree_t *)root->redblack_tree.left)->key);
     CuAssertIntEquals(tc, red, ((test_redblack_tree_t *)root->redblack_tree.right)->redblack_tree.colour);
-    CuAssertIntEquals(tc, 4, ((test_redblack_tree_t *)root->redblack_tree.right)->key);
+    CuAssertIntEquals(tc, 3, ((test_redblack_tree_t *)root->redblack_tree.right)->key);
     CuAssertIntEquals(tc, black, ((test_redblack_tree_t *)((test_redblack_tree_t *)root->redblack_tree.right)->redblack_tree.right)->redblack_tree.colour);
-    CuAssertIntEquals(tc, black, ((test_redblack_tree_t *)((test_redblack_tree_t *)root->redblack_tree.right)->redblack_tree.left)->redblack_tree.colour);
-    CuAssertIntEquals(tc, 3, ((test_redblack_tree_t *)((test_redblack_tree_t *)root->redblack_tree.right)->redblack_tree.left)->key);
-    CuAssertIntEquals(tc, 8, ((test_redblack_tree_t *)((test_redblack_tree_t *)root->redblack_tree.right)->redblack_tree.right)->key);
-    CuAssertIntEquals(tc, red, ((test_redblack_tree_t *)((test_redblack_tree_t *)((test_redblack_tree_t *)root->redblack_tree.right)->redblack_tree.right)->redblack_tree.left)->redblack_tree.colour);
-    CuAssertIntEquals(tc, 6, ((test_redblack_tree_t *)((test_redblack_tree_t *)((test_redblack_tree_t *)root->redblack_tree.right)->redblack_tree.right)->redblack_tree.left)->key);
+    CuAssertIntEquals(tc, 4, ((test_redblack_tree_t *)((test_redblack_tree_t *)root->redblack_tree.right)->redblack_tree.right)->key);
   }
 
 
@@ -353,6 +321,10 @@ static void	redblack_tree_walk_preorder_cb(void *node, void *data)
 			walk_state = false;
 		break;
 	case 8:
+		if (elem->key != 7)
+			walk_state = false;
+		break;
+	case 7:
 		if (elem->key != 6)
 			walk_state = false;
 		break;
@@ -361,10 +333,6 @@ static void	redblack_tree_walk_preorder_cb(void *node, void *data)
 			walk_state = false;
 		break;
 	case 5:
-		if (elem->key != 7)
-			walk_state = false;
-		break;
-	case 7:
 		if (elem->key != 10)
 			walk_state = false;
 		break;
@@ -585,14 +553,14 @@ static void	redblack_tree_walk_postorder_cb(void *node, void *data)
 			walk_state = false;
 		break;
 	case 5:
-		if (elem->key != 7)
-			walk_state = false;
-		break;
-	case 7:
 		if (elem->key != 6)
 			walk_state = false;
 		break;
 	case 6:
+		if (elem->key != 7)
+			walk_state = false;
+		break;
+	case 7:
 		if (elem->key != 9)
 			walk_state = false;
 		break;

@@ -28,14 +28,14 @@ static void *__splay(void **tree,
 {
   int   diff;
   int   diff2;
-  void  *tmp;
+  void  *l1;
 
   /*
    *
    * Case 1. If the parent of n () is the root, rotate at n - i.e. apply the rotation that makes n the tree's root, and makes its former parent into its child.
    *  The next two cases affect both n and its two immediate ancestors (also ).
    *
-   * Case 2. If n and its parent p have the same orientation - i.e. they are both left or both right childrent - first rotate at p and then at n.
+   * Case 2. If n and its parent p have the same orientation - i.e. they are both left or both right children - first rotate at p and then at n.
    *
    * Case 3. On the other hand, if n and its parent p have different orientations - then rotate twice at n.
    *
@@ -47,34 +47,36 @@ static void *__splay(void **tree,
     {
       diff2 = compare_key_func(GET_FIELD(*tree, m, splay_tree_t)->left, key);
       if (diff2 == BST_TREE_MATCH)
-        *tree = avl_single_rotate_with_left(*tree, m);
+        *tree = avl_single_rotate_with_right(*tree, m);
       if (diff2 == BST_TREE_LEFT)
       {
-        *tree = avl_single_rotate_with_left(*tree, m);
-        *tree = avl_single_rotate_with_left(*tree, m);
+        *tree = avl_single_rotate_with_right(*tree, m);
+        *tree = avl_single_rotate_with_right(*tree, m);
       }
       if (diff2 == BST_TREE_RIGHT)
       {
-        tmp = GET_FIELD(*tree, m, splay_tree_t)->left;
-        tmp = avl_single_rotate_with_right(tmp, m);
-        GET_FIELD(*tree, m, splay_tree_t)->left = tmp;
+        l1 = GET_FIELD(*tree, m, splay_tree_t)->left;
+        l1 = avl_single_rotate_with_left(l1, m);
+        GET_FIELD(*tree, m, splay_tree_t)->left = l1;
+        *tree = avl_single_rotate_with_right(*tree, m);
       }
     }
     else
     {
       diff2 = compare_key_func(GET_FIELD(*tree, m, splay_tree_t)->right, key);
       if (diff2 == BST_TREE_MATCH)
-        *tree = avl_single_rotate_with_right(*tree, m);
+        *tree = avl_single_rotate_with_left(*tree, m);
       if (diff2 == BST_TREE_RIGHT)
       {
-        *tree = avl_single_rotate_with_right(*tree, m);
-        *tree = avl_single_rotate_with_right(*tree, m);
+        *tree = avl_single_rotate_with_left(*tree, m);
+        *tree = avl_single_rotate_with_left(*tree, m);
       }
       if (diff2 == BST_TREE_LEFT)
       {
-        tmp = GET_FIELD(*tree, m, splay_tree_t)->right;
-        tmp = avl_single_rotate_with_left(tmp, m);
-        GET_FIELD(*tree, m, splay_tree_t)->right = tmp;
+        l1 = GET_FIELD(*tree, m, splay_tree_t)->right;
+        l1 = avl_single_rotate_with_right(l1, m);
+        GET_FIELD(*tree, m, splay_tree_t)->right = l1;
+        *tree = avl_single_rotate_with_left(*tree, m);
       }
     }
   }

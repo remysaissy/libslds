@@ -49,7 +49,7 @@ typedef struct          redblack_tree_s
  * @return true on success, false on error.
  */
 #define redblack_tree_init(tree, m)                     \
-    _redblack_tree_init((void *)(tree),                     \
+    _ebst_tree_init((void *)(tree),                     \
            (unsigned int)offsetof(typeof(*(tree)), m))
 
 /**
@@ -168,15 +168,6 @@ typedef struct          redblack_tree_s
 
 /* tree implementation. */
 
-
-/**
- * Initialize a redblack_ tree node.
- * @param tree The root of the tree.
- * @param m The offset of the binary tree data structure in tree.
- * @return true on success, false on error.
- */
-bool    _redblack_tree_init(void *tree,
-            unsigned int m);
 /**
  * Insert a redblack_ tree node.
  * @param tree The root of the tree.
