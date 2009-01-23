@@ -13,22 +13,25 @@
 </externalSettings>
 <extensions>
 <extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+<extension id="org.eclipse.cdt.core.GNU_ELF" point="org.eclipse.cdt.core.BinaryParser"/>
 <extension id="org.eclipse.cdt.core.MakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 <extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 <extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+<extension id="org.eclipse.cdt.core.VCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 </extensions>
 </storageModule>
 <storageModule moduleId="cdtBuildSystem" version="4.0.0">
-<configuration artifactExtension="a" artifactName="libslds" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.staticLib" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.staticLib" description="" id="cdt.managedbuild.toolchain.gnu.base.1266342953" name="BUILD-STATIC" parent="org.eclipse.cdt.build.core.emptycfg" prebuildStep="">
+<configuration artifactExtension="a" artifactName="libslds" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.staticLib" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.staticLib" description="" errorParsers="org.eclipse.cdt.core.VCErrorParser;org.eclipse.cdt.core.GLDErrorParser" id="cdt.managedbuild.toolchain.gnu.base.1266342953" name="BUILD-STATIC" parent="org.eclipse.cdt.build.core.emptycfg" prebuildStep="">
 <folderInfo id="cdt.managedbuild.toolchain.gnu.base.1266342953.1035148572" name="/" resourcePath="">
-<toolChain id="cdt.managedbuild.toolchain.gnu.base.1961165778" name="cdt.managedbuild.toolchain.gnu.base" resourceTypeBasedDiscovery="false" superClass="cdt.managedbuild.toolchain.gnu.base">
-<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="cdt.managedbuild.target.gnu.platform.base.2057155417" name="Debug Platform" osList="linux,hpux,aix,qnx" superClass="cdt.managedbuild.target.gnu.platform.base"/>
-<builder buildPath="${workspace_loc:/libslds/BUILD-STATIC}" id="cdt.managedbuild.target.gnu.builder.base.1896774300" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" parallelBuildOn="false" parallelizationNumber="-1" superClass="cdt.managedbuild.target.gnu.builder.base"/>
-<tool id="cdt.managedbuild.tool.gnu.archiver.base.698020051" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base">
+<toolChain errorParsers="" id="cdt.managedbuild.toolchain.gnu.base.1961165778" name="cdt.managedbuild.toolchain.gnu.base" resourceTypeBasedDiscovery="false" superClass="cdt.managedbuild.toolchain.gnu.base">
+<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF;org.eclipse.cdt.core.GNU_ELF" id="cdt.managedbuild.target.gnu.platform.base.2057155417" name="Debug Platform" osList="linux,hpux,aix,qnx" superClass="cdt.managedbuild.target.gnu.platform.base"/>
+<builder buildPath="${workspace_loc:/libslds}" cleanBuildTarget="fclean" enabledIncrementalBuild="true" errorParsers="org.eclipse.cdt.core.MakeErrorParser" id="cdt.managedbuild.target.gnu.builder.base.1896774300" incrementalBuildTarget="build" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" parallelBuildOn="false" parallelizationNumber="-1" superClass="cdt.managedbuild.target.gnu.builder.base"/>
+<tool errorParsers="" id="cdt.managedbuild.tool.gnu.archiver.base.698020051" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base">
 <outputType id="cdt.managedbuild.tool.gnu.archiver.output.1398033634" outputPrefix="" superClass="cdt.managedbuild.tool.gnu.archiver.output"/>
 </tool>
 <tool id="cdt.managedbuild.tool.gnu.cpp.compiler.base.995325913" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.base"/>
-<tool id="cdt.managedbuild.tool.gnu.c.compiler.base.1346223879" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.base">
+<tool errorParsers="org.eclipse.cdt.core.GCCErrorParser" id="cdt.managedbuild.tool.gnu.c.compiler.base.1346223879" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.base">
 <option id="gnu.c.compiler.option.include.paths.1617502813" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/libslds/include}&quot;"/>
 </option>
@@ -47,7 +50,7 @@
 </inputType>
 </tool>
 <tool id="cdt.managedbuild.tool.gnu.cpp.linker.base.237641608" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.base"/>
-<tool id="cdt.managedbuild.tool.gnu.assembler.base.1016393589" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.base">
+<tool errorParsers="org.eclipse.cdt.core.GASErrorParser" id="cdt.managedbuild.tool.gnu.assembler.base.1016393589" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.base">
 <inputType id="cdt.managedbuild.tool.gnu.assembler.input.1611460452" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 </tool>
 </toolChain>
@@ -63,6 +66,8 @@
 <storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 
 <storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
+
+
 
 
 <storageModule moduleId="scannerConfiguration">
@@ -337,7 +342,7 @@
 </profile>
 <profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfile">
 <buildOutputProvider>
-<openAction enabled="true" filePath=""/>
+<openAction enabled="true" filePath="/home/remy/workspace/libslds/Makefile"/>
 <parser enabled="true"/>
 </buildOutputProvider>
 <scannerInfoProvider id="specsFile">
@@ -646,14 +651,57 @@
 </profile>
 </scannerConfigBuildInfo>
 </storageModule>
-
-<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
+<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets">
+<buildTargets>
+<target name="build" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+<buildCommand>make</buildCommand>
+<buildArguments/>
+<buildTarget>build</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>true</useDefaultCommand>
+<runAllBuilders>true</runAllBuilders>
+</target>
+<target name="build-i386" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+<buildCommand>make</buildCommand>
+<buildArguments/>
+<buildTarget>build-i386</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>true</useDefaultCommand>
+<runAllBuilders>true</runAllBuilders>
+</target>
+<target name="clean" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+<buildCommand>make</buildCommand>
+<buildArguments/>
+<buildTarget>clean</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>true</useDefaultCommand>
+<runAllBuilders>true</runAllBuilders>
+</target>
+<target name="fclean-i386" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+<buildCommand>make</buildCommand>
+<buildArguments/>
+<buildTarget>fclean-i386</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>true</useDefaultCommand>
+<runAllBuilders>true</runAllBuilders>
+</target>
+<target name="fclean" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+<buildCommand>make</buildCommand>
+<buildArguments/>
+<buildTarget>fclean</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>true</useDefaultCommand>
+<runAllBuilders>true</runAllBuilders>
+</target>
+</buildTargets>
+</storageModule>
 </cconfiguration>
 <cconfiguration id="cdt.managedbuild.config.gnu.exe.release.341901410">
 <storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.exe.release.341901410" moduleId="org.eclipse.cdt.core.settings" name="UNIT_TESTING">
 <externalSettings/>
 <extensions>
 <extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+<extension id="org.eclipse.cdt.core.GNU_ELF" point="org.eclipse.cdt.core.BinaryParser"/>
 <extension id="org.eclipse.cdt.core.MakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 <extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 <extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
@@ -664,7 +712,7 @@
 <configuration artifactName="libslds" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="" id="cdt.managedbuild.config.gnu.exe.release.341901410" name="UNIT_TESTING" parent="cdt.managedbuild.config.gnu.exe.release" prebuildStep="${workspace_loc:/libslds/tests-core/gen-tests.sh} ${workspace_loc:/libslds/}">
 <folderInfo id="cdt.managedbuild.config.gnu.exe.release.341901410." name="/" resourcePath="">
 <toolChain id="cdt.managedbuild.toolchain.gnu.exe.release.2016453967" name="Linux GCC" resourceTypeBasedDiscovery="false" superClass="cdt.managedbuild.toolchain.gnu.exe.release">
-<targetPlatform id="cdt.managedbuild.target.gnu.platform.exe.release.1980100002" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.exe.release"/>
+<targetPlatform binaryParser="org.eclipse.cdt.core.ELF;org.eclipse.cdt.core.GNU_ELF" id="cdt.managedbuild.target.gnu.platform.exe.release.1980100002" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.exe.release"/>
 <builder buildPath="${workspace_loc:/libslds/UNIT_TESTING}" id="cdt.managedbuild.target.gnu.builder.exe.release.281675735" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.exe.release"/>
 <tool id="cdt.managedbuild.tool.gnu.archiver.base.865060950" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base"/>
 <tool id="cdt.managedbuild.tool.gnu.cpp.compiler.exe.release.270353656" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.exe.release">
@@ -710,6 +758,8 @@
 <storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 
 
+
+
 <storageModule moduleId="scannerConfiguration">
 <autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile"/>
 <profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
@@ -982,7 +1032,7 @@
 </profile>
 <profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfile">
 <buildOutputProvider>
-<openAction enabled="true" filePath=""/>
+<openAction enabled="true" filePath="/home/remy/workspace/libslds/Makefile"/>
 <parser enabled="true"/>
 </buildOutputProvider>
 <scannerInfoProvider id="specsFile">
@@ -1291,8 +1341,50 @@
 </profile>
 </scannerConfigBuildInfo>
 </storageModule>
-
-<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
+<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets">
+<buildTargets>
+<target name="build" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+<buildCommand>make</buildCommand>
+<buildArguments/>
+<buildTarget>build</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>true</useDefaultCommand>
+<runAllBuilders>true</runAllBuilders>
+</target>
+<target name="build-i386" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+<buildCommand>make</buildCommand>
+<buildArguments/>
+<buildTarget>build-i386</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>true</useDefaultCommand>
+<runAllBuilders>true</runAllBuilders>
+</target>
+<target name="clean" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+<buildCommand>make</buildCommand>
+<buildArguments/>
+<buildTarget>clean</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>true</useDefaultCommand>
+<runAllBuilders>true</runAllBuilders>
+</target>
+<target name="fclean-i386" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+<buildCommand>make</buildCommand>
+<buildArguments/>
+<buildTarget>fclean-i386</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>true</useDefaultCommand>
+<runAllBuilders>true</runAllBuilders>
+</target>
+<target name="fclean" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+<buildCommand>make</buildCommand>
+<buildArguments/>
+<buildTarget>fclean</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>true</useDefaultCommand>
+<runAllBuilders>true</runAllBuilders>
+</target>
+</buildTargets>
+</storageModule>
 </cconfiguration>
 <cconfiguration id="cdt.managedbuild.config.gnu.exe.release.1141133840">
 <storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.exe.release.1141133840" moduleId="org.eclipse.cdt.core.settings" name="BUILD-DYNAMIC">
@@ -1304,6 +1396,7 @@
 </externalSettings>
 <extensions>
 <extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+<extension id="org.eclipse.cdt.core.GNU_ELF" point="org.eclipse.cdt.core.BinaryParser"/>
 <extension id="org.eclipse.cdt.core.MakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 <extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 <extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
@@ -1315,7 +1408,7 @@
 <configuration artifactExtension="so" artifactName="slds" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.sharedLib" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.sharedLib" cleanCommand="rm -rf" description="" errorParsers="org.eclipse.cdt.core.VCErrorParser" id="cdt.managedbuild.config.gnu.exe.release.1141133840" name="BUILD-DYNAMIC" parent="cdt.managedbuild.config.gnu.exe.release">
 <folderInfo id="cdt.managedbuild.config.gnu.exe.release.1141133840." name="/" resourcePath="">
 <toolChain errorParsers="" id="cdt.managedbuild.toolchain.gnu.exe.release.427232719" name="Linux GCC" resourceTypeBasedDiscovery="false" superClass="cdt.managedbuild.toolchain.gnu.exe.release">
-<targetPlatform id="cdt.managedbuild.target.gnu.platform.exe.release.328453214" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.exe.release"/>
+<targetPlatform binaryParser="org.eclipse.cdt.core.ELF;org.eclipse.cdt.core.GNU_ELF" id="cdt.managedbuild.target.gnu.platform.exe.release.328453214" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.exe.release"/>
 <builder buildPath="${workspace_loc:/libslds/BUILD-DYNAMIC}" errorParsers="org.eclipse.cdt.core.MakeErrorParser" id="cdt.managedbuild.target.gnu.builder.exe.release.1212819890" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.exe.release"/>
 <tool id="cdt.managedbuild.tool.gnu.archiver.base.913932487" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base"/>
 <tool id="cdt.managedbuild.tool.gnu.cpp.compiler.exe.release.568718920" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.exe.release">
@@ -1356,6 +1449,8 @@
 
 <storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
 <storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
+
+
 <storageModule moduleId="scannerConfiguration">
 <autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile"/>
 <profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
@@ -1628,7 +1723,7 @@
 </profile>
 <profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfile">
 <buildOutputProvider>
-<openAction enabled="true" filePath=""/>
+<openAction enabled="true" filePath="/home/remy/workspace/libslds/Makefile"/>
 <parser enabled="true"/>
 </buildOutputProvider>
 <scannerInfoProvider id="specsFile">
@@ -1937,8 +2032,50 @@
 </profile>
 </scannerConfigBuildInfo>
 </storageModule>
-
-<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
+<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets">
+<buildTargets>
+<target name="build" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+<buildCommand>make</buildCommand>
+<buildArguments/>
+<buildTarget>build</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>true</useDefaultCommand>
+<runAllBuilders>true</runAllBuilders>
+</target>
+<target name="build-i386" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+<buildCommand>make</buildCommand>
+<buildArguments/>
+<buildTarget>build-i386</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>true</useDefaultCommand>
+<runAllBuilders>true</runAllBuilders>
+</target>
+<target name="clean" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+<buildCommand>make</buildCommand>
+<buildArguments/>
+<buildTarget>clean</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>true</useDefaultCommand>
+<runAllBuilders>true</runAllBuilders>
+</target>
+<target name="fclean-i386" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+<buildCommand>make</buildCommand>
+<buildArguments/>
+<buildTarget>fclean-i386</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>true</useDefaultCommand>
+<runAllBuilders>true</runAllBuilders>
+</target>
+<target name="fclean" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+<buildCommand>make</buildCommand>
+<buildArguments/>
+<buildTarget>fclean</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>true</useDefaultCommand>
+<runAllBuilders>true</runAllBuilders>
+</target>
+</buildTargets>
+</storageModule>
 </cconfiguration>
 </storageModule>
 <storageModule moduleId="cdtBuildSystem" version="4.0.0">
