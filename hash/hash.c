@@ -23,7 +23,7 @@
 
 bool	_hashtable_init(void **hash, unsigned int n)
 {
-  int	it;
+  unsigned int	it;
 
   if (hash && n > 0)
     {
@@ -42,7 +42,7 @@ bool	_hashtable_insert(void **hash,
 {
   uint64_t	hki;
 
-  if (!hash || !key || !content || !hash_func || m < 0)
+  if (!hash || !key || !content || !hash_func)
     return (false);
   hki = hash_func(key);
   _slist_add_head(hash + hki, content, m);
@@ -58,7 +58,7 @@ void	*_hashtable_lookup(void **hash,
   uint64_t   hki;
   void	*it;
 
-  if (!hash || !key || !hash_func || !hash_comp || m < 0)
+  if (!hash || !key || !hash_func || !hash_comp)
     return (NULL);
   hki = hash_func(key);
   it = hash[hki];
@@ -81,7 +81,7 @@ bool	_hashtable_remove(void **hash,
   void		*prev_it;
   void		*it;
 
-  if (!hash || !key || !entry || !hash_func || m < 0)
+  if (!hash || !key || !entry || !hash_func)
     return (false);
   hki = hash_func(key);
   prev_it = NULL;

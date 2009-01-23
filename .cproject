@@ -646,6 +646,8 @@
 </profile>
 </scannerConfigBuildInfo>
 </storageModule>
+
+<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
 </cconfiguration>
 <cconfiguration id="cdt.managedbuild.config.gnu.exe.release.341901410">
 <storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.exe.release.341901410" moduleId="org.eclipse.cdt.core.settings" name="UNIT_TESTING">
@@ -1289,6 +1291,8 @@
 </profile>
 </scannerConfigBuildInfo>
 </storageModule>
+
+<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
 </cconfiguration>
 <cconfiguration id="cdt.managedbuild.config.gnu.exe.release.1141133840">
 <storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.exe.release.1141133840" moduleId="org.eclipse.cdt.core.settings" name="BUILD-DYNAMIC">
@@ -1933,6 +1937,8 @@
 </profile>
 </scannerConfigBuildInfo>
 </storageModule>
+
+<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
 </cconfiguration>
 </storageModule>
 <storageModule moduleId="cdtBuildSystem" version="4.0.0">
